@@ -2,153 +2,153 @@
 
 let cityObjects = [{
   name: "New York",
-  state: "New York",
+  state: "NY",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Los Angeles",
-  state: "California",
+  state: "CA",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Chicago",
-  state: "Illinois",
+  state: "IL",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Houston",
-  state: "Texas",
+  state: "TX",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Philadelphia",
-  state: "Pennsylvania",
+  state: "PA",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Phoenix",
-  state: "Arizona",
+  state: "AZ",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "San Antonio",
-  state: "Texas",
+  state: "TX",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "San Diego",
-  state: "Califonia",
+  state: "CA",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Dallas",
-  state: "Texas",
+  state: "TX`",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "San Jose",
-  state: "California",
+  state: "CA",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Austin",
-  state: "Texas",
+  state: "TX",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Jacksonville",
-  state: "Florida",
+  state: "FL",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "San Francisco",
-  state: "Califonia",
+  state: "CA",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Indianapolis",
-  state: "Indiana",
+  state: "IN",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Columbus",
-  state: "Ohio",
+  state: "OH",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Fort Worth",
-  state: "Texas",
+  state: "TX",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Charlotte",
-  state: "North Carolina",
+  state: "NC",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Seattle",
-  state: "Washington",
+  state: "WA",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Denver",
-  state: "Colorado",
+  state: "CO",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "El Paso",
-  state: "Texas",
+  state: "TX",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Detroit",
-  state: "Michigan",
+  state: "MI",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
-  name: "Washington",
+  name: "WA",
   state: "D.C.",
   country: "United States",
   createdAt: new Date(),
@@ -156,196 +156,196 @@ let cityObjects = [{
 },
 {
   name: "Boston",
-  state: "Massachusettes",
+  state: "MA",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Memphis",
-  state: "Tennessee",
+  state: "TN",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Nashville",
-  state: "Tennesee",
+  state: "TN",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Portland",
-  state: "Oregon",
+  state: "OR",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Oklahoma City",
-  state: "Oklahoma",
+  state: "OK",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Las Vegas",
-  state: "Nevada",
+  state: "NV",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Baltimore",
-  state: "Maryland",
+  state: "MD",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Louisville",
-  state: "Kentucky",
+  state: "KY",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Milwaukee",
-  state: "Wisconsin",
+  state: "WI",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Albuquerque",
-  state: "New Mexico",
+  state: "NM",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Tucson",
-  state: "Arizona",
+  state: "AZ",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Fresno",
-  state: "Califonia",
+  state: "CA",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Sacramento",
-  state: "Califonia",
+  state: "CA",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Kansas City",
-  state: "Missouri",
+  state: "MO",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Long Beach",
-  state: "Califonia",
+  state: "CA",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Mesa",
-  state: "Arizona",
+  state: "AZ",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Atlanta",
-  state: "Georgia",
+  state: "GA",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
-  name: "Colorado Springs",
-  state: "Colorado",
+  name: "CO Springs",
+  state: "CO",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Virginia Beach",
-  state: "Virginia",
+  state: "VA",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Raleigh",
-  state: "North Carolina",
+  state: "NC",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Omaha",
-  state: "Nebraska",
+  state: "NE",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Miami",
-  state: "Florida",
+  state: "FL",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Oakland",
-  state: "California",
+  state: "CA",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Minneapolis",
-  state: "Minnesota",
+  state: "MN",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Tulsa",
-  state: "Oklahoma",
+  state: "OK",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Wichita",
-  state: "Kansas",
+  state: "KS",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "New Orleans",
-  state: "Louisiana",
+  state: "LA",
   country: "United States",
   createdAt: new Date(),
   updatedAt: new Date()
 },
 {
   name: "Arlington",
-  state: "Texas",
+  state: "TX",
   country: "UnitedStates",
   createdAt: new Date(),
   updatedAt: new Date()
