@@ -3,7 +3,7 @@ var router = express.Router();
 var User = require('../../../models').User;
 
 router.post("/", function(req,res,next) {
-  var username = req.body.username
+  var email = req.body.email
   var password = req.body.password
   if (req.body.passwordConfirmation === "") {
     res.setHeader("Content-Type", "application/json");
@@ -11,7 +11,7 @@ router.post("/", function(req,res,next) {
   }
   else if (req.body.password === req.body.passwordConfirmation) {
     User.create({
-      username: username,
+      email: email,
       password: password,
       api_key: Math.random().toString(36).substring(2,8)
       // the arg for toString is the radix which means what base (binary = 2); 36 includes letters
@@ -19,7 +19,7 @@ router.post("/", function(req,res,next) {
     })
     .then(user => {
       res.setHeader("Content-Type", "application/json");
-      res.status(201).send(`${username} has been created`);
+      res.status(201).send(`${email} has been created`);
     })
     .catch(error => {
       res.setHeader("Content-Type", "application/json");
