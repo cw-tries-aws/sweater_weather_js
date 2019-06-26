@@ -13,7 +13,6 @@ router.post("/", function(req,res,next) {
       email: email
     }
   }).then(result => {
-    console.log(result)
     if (result) {
       res.setHeader("Content-Type", "application/json");
       res.status(409).json({
