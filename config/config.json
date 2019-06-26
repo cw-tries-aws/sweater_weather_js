@@ -18,7 +18,7 @@
   "production": {
     "username": "walsh",
     "password": null,
-    "database": "dsweater_weather_js_production",
+    "database": "sweater_weather_js_production",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": false
