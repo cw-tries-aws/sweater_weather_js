@@ -21,6 +21,7 @@
     "database": "sweater_weather_js_production",
     "host": "127.0.0.1",
     "dialect": "postgres",
-    "operatorsAliases": false
+    "operatorsAliases": false,
+    "use_env_variable": "postgres://wpekuvfgqrhtmw:fe1a5c2a12c97b58b796e836ebbea883354e50afa23f1edf5b1715b687dbd0a1@ec2-54-221-215-228.compute-1.amazonaws.com:5432/dchbqs21o94an0"
   }
 }
