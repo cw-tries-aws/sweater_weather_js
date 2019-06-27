@@ -1,0 +1,42 @@
+var express = require('express');
+var router = express.Router();
+var User = require('../../../models').User;
+var bcrypt = require('bcryptjs');
+
+router.post('', function(req,res,next) {
+  var email = req.body.email
+  var passwordAttempt = req.body.password
+
+  User.findOne({
+    where: {
+      email: email
+    }
+  }).then(result => {
+    if (result) {
+      let passwordHash = result["dataValues"]["password"]
+      let apiKey = result["dataValues"]["api_key"]
+      let verify = bcrypt.compare(passwordAttempt, passwordHash)
+        .then(comparison => {
+          if (comparison) {
+            res.setHeader("Content-Type", "application/json");
+            res.status(201).json({
+              api_key: apiKey
+            });
+          }
+          else {
+            res.setHeader("Content-Type", "application/json");
+            res.status(404).json({
+              error: "Email and password do not match."
+            });
+          }
+        })
+    }
+  }).catch(error => {
+    res.setHeader("Content-Type", "application/json");
+    res.status(500).json({
+      error: "Email does not exist in system."
+    });
+  });
+});
+
+module.exports = router;
