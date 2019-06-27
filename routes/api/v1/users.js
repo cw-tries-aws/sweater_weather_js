@@ -2,11 +2,14 @@ var express = require('express');
 var router = express.Router();
 var User = require('../../../models').User;
 var bcrypt = require('bcryptjs');
+var validator = require('email-validator');
 
 router.post("/", function(req,res,next) {
   var email = req.body.email
   var password = req.body.password
   var confirm = req.body.passwordConfirmation
+
+  if (email)
 
   User.findOne({
     where: {
@@ -24,7 +27,19 @@ router.post("/", function(req,res,next) {
         res.setHeader("Content-Type", "application/json");
         res.status(409).send(`Must provide password confirmation.`)
       }
-      else if (password === confirm) {
+      else if (!validator.validate(email)) {
+        res.setHeader("Content-Type", "application/json");
+        res.status(409).send(`Invalid email address.`)
+      }
+      else if (password.length < 8) {
+        res.setHeader("Content-Type", "application/json");
+        res.status(409).send(`Password must be 8 characters or greater.`)
+      }
+      else if (password !== confirm) {
+        res.setHeader("Content-Type", "application/json");
+        res.status(409).send(`Passwords must match.`)
+      }
+      else {
         bcrypt.genSalt(10, function(err,salt) {
           bcrypt.hash(req.body.password, salt, function(err,hash) {
             User.create({
@@ -44,10 +59,6 @@ router.post("/", function(req,res,next) {
             });
           })
         })
-      }
-      else {
-        res.setHeader("Content-Type", "application/json");
-        res.status(409).send(`Passwords must match.`)
       }
     }
   });
