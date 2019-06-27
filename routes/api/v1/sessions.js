@@ -2,20 +2,21 @@ var express = require('express');
 var router = express.Router();
 var User = require('../../../models').User;
 var bcrypt = require('bcryptjs');
+var validator = require('email-validator');
 
 router.post('', function(req,res,next) {
   var email = req.body.email
   var passwordAttempt = req.body.password
-
-  User.findOne({
-    where: {
-      email: email
-    }
-  }).then(result => {
-    if (result) {
-      let passwordHash = result["dataValues"]["password"]
-      let apiKey = result["dataValues"]["api_key"]
-      let verify = bcrypt.compare(passwordAttempt, passwordHash)
+  if (validator.validate(email)) {
+    User.findOne({
+      where: {
+        email: email
+      }
+    }).then(result => {
+      if (result) {
+        let passwordHash = result["dataValues"]["password"]
+        let apiKey = result["dataValues"]["api_key"]
+        let verify = bcrypt.compare(passwordAttempt, passwordHash)
         .then(comparison => {
           if (comparison) {
             res.setHeader("Content-Type", "application/json");
@@ -30,13 +31,20 @@ router.post('', function(req,res,next) {
             });
           }
         })
-    }
-  }).catch(error => {
-    res.setHeader("Content-Type", "application/json");
-    res.status(500).json({
-      error: "Email does not exist in system."
+      }
+    }).catch(error => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(500).json({
+        error: "Email does not exist in system."
+      });
     });
-  });
+  }
+  else {
+    res.setHeader("Content-Type", "application/json");
+    res.status(409).json({
+      error:`Invalid email address.`
+    });
+  }
 });
 
 module.exports = router;

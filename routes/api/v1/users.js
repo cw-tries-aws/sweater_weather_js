@@ -31,18 +31,22 @@ router.post("/", function(req,res,next) {
       }
       else if (!validator.validate(email)) {
         res.setHeader("Content-Type", "application/json");
-        res.status(409).send(`Invalid email address.`)
+        res.status(409).json({
+          error:`Invalid email address.`
+        });
       }
       else if (password.length < 8) {
         res.setHeader("Content-Type", "application/json");
         res.status(409).json({
           error: `Invalid email address.`
-        });
+        })
+      }
       else if (password !== confirm) {
         res.setHeader("Content-Type", "application/json");
         res.status(409).json({
           error: `Passwords must match.`
         });
+      }
       else {
         bcrypt.genSalt(10, function(err,salt) {
           bcrypt.hash(req.body.password, salt, function(err,hash) {
@@ -64,8 +68,7 @@ router.post("/", function(req,res,next) {
           })
         })
       }
-    }
-  });
+  }});
 });
 
 module.exports = router;
