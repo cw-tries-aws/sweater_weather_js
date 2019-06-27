@@ -32,13 +32,13 @@ const getCityData = (input) => {
 
 
 
-const steadyUrl = `https://weather.cit.api.here.com/weather/1.0/report.json?app_id=DemoAppId01082013GAL&app_code=AJKnXv84fjrb0KIHawS0Tg&product=forecast_astronomy&name=${city}`
+// const steadyUrl = `https://weather.cit.api.here.com/weather/1.0/report.json?app_id=DemoAppId01082013GAL&app_code=AJKnXv84fjrb0KIHawS0Tg&product=forecast_astronomy&name=${city}`
 
-const currentUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/${city.coordinates}`
-const currentUrl2 = `?exclude=daily,minutesly,hourly,alerts,flags`
-
-const forecastUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/${city.coordinates}`
-const forecastUrl2 = `?exclude=currently,minutesly,hourly,alerts,flags&time=${new Date()}`
+// const currentUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/${city.coordinates}`
+// const currentUrl2 = `?exclude=daily,minutesly,hourly,alerts,flags`
+//
+// const forecastUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/${city.coordinates}`
+// const forecastUrl2 = `?exclude=currently,minutesly,hourly,alerts,flags&time=${new Date()}`
 
 
 const getNewData = (id,url) => {
@@ -47,7 +47,7 @@ const getNewData = (id,url) => {
       id: id
     }
   }).then(result => result.json())
-  .then(city => return `${city.name}, ${city.state}`);
+  .then(city => `${city.name}, ${city.state}`);
   fetch(`url`)
   .then(response => response.json())
   .then(json => {
@@ -61,7 +61,7 @@ const getNewCityAll = (id) => {
       id: id
     }
   }).then(result => result.json())
-    .then(city => return city);
+    .then(city => city);
   const steadyUrlFull = steadyUrl + city.name + "," + city.state;
   const currentUrlFUll = currentUrl1 + city.lat + "," + city.long + currentUrl2;
   const forecastUrlFUll = forecastUrl1 + city.lat + "," + city.long + forecastUrl2;
@@ -91,9 +91,9 @@ router.get("/", function(req,res,next) {
         // getNewCityAll(forecastCity.id)
 // });
   // }
-    else {
-      City.create(cityData)
-    }
+    // else {
+    //   City.create(cityData)
+    // }
   // res.status(201).send("forecastCity");
 })
 
