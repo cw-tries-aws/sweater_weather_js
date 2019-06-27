@@ -12,8 +12,9 @@ var City = require('../../../models').City;
 
 const latUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=`
 const latKey = `&key=${process.env.GOOGLE_SECRET_KEY}`
+
 const getCityData = (input) => {
-  fetch(latUrl + input + latKey)
+  return fetch(latUrl + input + latKey)
   .then(response => response.json())
   .then(json => {
     let address = json["results"][0]["formatted_address"];
@@ -30,7 +31,11 @@ const getCityData = (input) => {
   });
 };
 
-
+console.log(getCityData(input)
+  .then(cityData => {
+    fetc(`cityData`)
+    USE THIS FOR NEXT FETCH CALL)
+)
 
 // const steadyUrl = `https://weather.cit.api.here.com/weather/1.0/report.json?app_id=DemoAppId01082013GAL&app_code=AJKnXv84fjrb0KIHawS0Tg&product=forecast_astronomy&name=${city}`
 
