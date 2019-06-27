@@ -25,7 +25,9 @@ router.post("/", function(req,res,next) {
     else {
       if (confirm === "") {
         res.setHeader("Content-Type", "application/json");
-        res.status(409).send(`Must provide password confirmation.`)
+        res.status(409).json({
+          error: `Must provide password confirmation.`
+        });
       }
       else if (!validator.validate(email)) {
         res.setHeader("Content-Type", "application/json");
@@ -33,12 +35,14 @@ router.post("/", function(req,res,next) {
       }
       else if (password.length < 8) {
         res.setHeader("Content-Type", "application/json");
-        res.status(409).send(`Password must be 8 characters or greater.`)
-      }
+        res.status(409).json({
+          error: `Invalid email address.`
+        });
       else if (password !== confirm) {
         res.setHeader("Content-Type", "application/json");
-        res.status(409).send(`Passwords must match.`)
-      }
+        res.status(409).json({
+          error: `Passwords must match.`
+        });
       else {
         bcrypt.genSalt(10, function(err,salt) {
           bcrypt.hash(req.body.password, salt, function(err,hash) {
