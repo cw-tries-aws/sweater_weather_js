@@ -19,7 +19,7 @@ router.post('', function(req,res,next) {
         .then(comparison => {
           if (comparison) {
             res.setHeader("Content-Type", "application/json");
-            res.status(201).json({
+            res.status(200).json({
               api_key: apiKey
             });
           }
