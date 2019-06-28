@@ -14,31 +14,36 @@ const latUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=`
 const latKey = `&key=${process.env.GOOGLE_SECRET_KEY}`
 
 const getCityData = (input) => {
-  return fetch(latUrl + input + latKey)
+  fetch(latUrl + input + latKey)
   .then(response => {
     if (response.ok) {
       return response.json();}
     throw new Error('Request Failed.');},
     networkError => console.log(networkError.message))
   .then(json => {
-    let address = json["results"][0]["formatted_address"];
-    let geodata = json["results"][0]["geometry"]["location"];
-    let cityData = {
-      name: address.split(", ")[0],
-      state: address.split(", ")[1],
-      country: address.split(", ")[2],
-      lat: geodata["lat"],
-      long: geodata["lng"]
-    }
-    // console.log(cityData)
-    return cityData
+    formatCityData(json)
+    console.log(formatCityData(json))
   })
   .catch((error) => {
     console.log(error)
   })
 };
 
+function formatCityData(json) {
+  let address = json["results"][0]["formatted_address"];
+  let geodata = json["results"][0]["geometry"]["location"];
+  let cityData = {
+    name: address.split(", ")[0],
+    state: address.split(", ")[1],
+    country: address.split(", ")[2],
+    lat: geodata["lat"],
+    long: geodata["lng"]
+  }
+  // var pry = require('pryjs'); eval(pry.it);
+  return cityData
+};
 
+console.log(getCityData("salem,or"))
 
 
 
@@ -78,7 +83,6 @@ const getNewData = (cityData,type,url1,url2) => {
 
 const getNewCityAll = (cityData) => {
   const test = getNewData(cityData,steadies,steadyUrl)
-  var pry = require('pryjs'); eval(pry.it);
   getNewData(cityData,latlong,currentUrl1,currentUrl2)
   getNewData(cityData,latlong,forecastUrl1,forecastUrl2)
   // steadies: getNewData(id,steadyUrlFull), ["astronomy"]["astronomy"]
@@ -86,7 +90,7 @@ const getNewCityAll = (cityData) => {
   // forecast: getNewData(id,forecastUrlFull)
 };
 
-var pry = require('pryjs'); eval(pry.it);
+// var pry = require('pryjs'); eval(pry.it);
 
 router.get("/", function(req,res,next) {
 //   const cityData = getCityData(req.query.location)
