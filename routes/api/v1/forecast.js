@@ -49,13 +49,6 @@ function formatCityData(json) {
   return cityData
 };
 
-// const x = getCityData("Salem,or")
-// .then(cityData => {
-//   getNewData(cityData,"steadies",steadyUrl)
-// }).then(response => {
-// })
-//
-// console.log(x)
 
 const getSteadyData = (cityData,url) => {
   const fullCity = cityData.name + ',' + cityData.state
@@ -141,23 +134,6 @@ const getCityDayData = (cityData,url1,url2) => {
   })
 };
 
-// eval(pry.it);
-
-
-// console.log(steadies)
-// console.log(cityDays)
-// console.log(currents)
-
-const getNewCityAll = (cityData) => {
-  const test = getNewData(cityData,steadies,steadyUrl)
-  getNewData(cityData,latlong,currentUrl1,currentUrl2)
-  getNewData(cityData,latlong,forecastUrl1,forecastUrl2)
-  // steadies: getNewData(id,steadyUrlFull), ["astronomy"]["astronomy"]
-  // current: getNewData(id,currentUrlFull),
-  // forecast: getNewData(id,forecastUrlFull)
-};
-
-// var pry = require('pryjs'); eval(pry.it);
 
 router.get("/", function(req,res,next) {
   const findOrCreateCityData = getCityData(req.query.location)
