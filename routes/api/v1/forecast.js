@@ -43,8 +43,8 @@ function formatCityData(json) {
     name: address.split(", ")[0],
     state: address.split(", ")[1],
     country: address.split(", ")[2],
-    lat: geodata["lat"],
-    long: geodata["lng"]
+    latitude: geodata["lat"],
+    longitude: geodata["lng"]
   }
   return cityData
 };
@@ -83,7 +83,7 @@ const getSteadyData = (cityData,url) => {
 
 
 const getCurrentData = (cityData,url1,url2) => {
-  const latLong = cityData.lat + ',' + cityData.long
+  const latLong = cityData.latitude + ',' + cityData.longitude
   return fetch(url1 + latLong + url2)
   .then(response => {
     if (response.ok) {
@@ -113,7 +113,7 @@ const getCurrentData = (cityData,url1,url2) => {
 
 
 const getCityDayData = (cityData,url1,url2) => {
-  const latLong = cityData.lat + ',' + cityData.long
+  const latLong = cityData.latitude + ',' + cityData.longitude
   return fetch(url1 + latLong + url2)
   .then(response => {
     if (response.ok) {
@@ -143,39 +143,10 @@ const getCityDayData = (cityData,url1,url2) => {
 
 // eval(pry.it);
 
-const steadies = getCityData("Salem,or")
-.then(cityData => {
-  return getSteadyData(cityData,steadyUrl)
-})
-.then(response => {
-  console.log(response)
-  return response
-})
-
-
-const currents = getCityData("salem,or")
-.then(cityData => {
-  return getCurrentData(cityData,currentUrl1,currentUrl2)
-})
-.then(response => {
-  console.log(response)
-  return response
-})
-
-
-const cityDays = getCityData("salem,or")
-.then(cityData => {
-  return getCityDayData(cityData,forecastUrl1,forecastUrl2)
-})
-.then(response => {
-  console.log(response)
-  return response
-})
 
 // console.log(steadies)
 // console.log(cityDays)
 // console.log(currents)
-// eval(pry.it)
 
 const getNewCityAll = (cityData) => {
   const test = getNewData(cityData,steadies,steadyUrl)
@@ -189,29 +160,77 @@ const getNewCityAll = (cityData) => {
 // var pry = require('pryjs'); eval(pry.it);
 
 router.get("/", function(req,res,next) {
-//   const cityData = getCityData(req.query.location)
-//   const forecastCity = City.FindAll({
-//     where: {
-//       name: cityData["name"],
-//       state: cityData["state"]
-//     }
-//   })
-//     .then(result => result.json())
-//     .then(json => {
-//       return json
-//     })
-//
-//   const cityId = forecastCity["dataValues"]["id"]
-//   if (forecastCity) {
-//     res.setHeader("Content-Type", "application/json");
-//     res.status(201).send({
-//         getNewCityAll(forecastCity.id)
-// });
-//   }
-//     else {
-//       City.create(cityData)
-//     }
-//   res.status(201).send("forecastCity");
-})
+  const findOrCreateCityData = getCityData(req.query.location)
+    .then(result => {
+      return City.findOrCreate({
+        where: {
+          name: result["name"],
+          state: result["state"],
+          country: result["country"],
+          latitude: result["latitude"].toString(),
+          longitude: result["longitude"].toString()
+        }
+      })
+      .then(city => {
+        return city
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    })
+    .then(data => {
+      return data[0]["dataValues"]
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+
+  const steadies = getCityData(req.query.location)
+    .then(cityData => {
+      return getSteadyData(cityData,steadyUrl)
+    })
+    .then(response => {
+      return response
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+
+  const currents = getCityData(req.query.location)
+    .then(cityData => {
+      return getCurrentData(cityData,currentUrl1,currentUrl2)
+    })
+    .then(response => {
+      return response
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+
+  const cityDays = getCityData(req.query.location)
+    .then(cityData => {
+      return getCityDayData(cityData,forecastUrl1,forecastUrl2)
+    })
+    .then(response => {
+      return response
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+
+
+
+  Promise.all([findOrCreateCityData,currents,steadies,cityDays])
+    .then(data => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(201).send({
+            city: data[0],
+            current: data[1],
+            steadies: data[2],
+            forecast: data[3]
+          })
+        });
+});
+
 
 module.exports = router;
