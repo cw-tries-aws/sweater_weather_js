@@ -4,7 +4,7 @@ var fetch = require('node-fetch')
 var pry = require('pryjs');
 require('dotenv').config()
 
-
+var User = require('../../../models').User;
 var City = require('../../../models').City;
 // var CitySteady = require('../../../models').CitySteady;
 // var CityCurrent = require('../../../models').CityCurrent;
@@ -136,76 +136,94 @@ const getCityDayData = (cityData,url1,url2) => {
 
 
 router.get("/", function(req,res,next) {
-  const findOrCreateCityData = getCityData(req.query.location)
-    .then(result => {
-      return City.findOrCreate({
-        where: {
-          name: result["name"],
-          state: result["state"],
-          country: result["country"],
-          latitude: result["latitude"].toString(),
-          longitude: result["longitude"].toString()
-        }
+  let inputKey = req.body.api_key
+  User.findOne({
+    where: {
+      api_key: inputKey
+    }
+  }).then(user => {
+    if (user) {
+      eval(pry.it)
+      const findOrCreateCityData = getCityData(req.query.location)
+      .then(result => {
+        return City.findOrCreate({
+          where: {
+            name: result["name"],
+            state: result["state"],
+            country: result["country"],
+            latitude: result["latitude"].toString(),
+            longitude: result["longitude"].toString()
+          }
+        })
+        .then(city => {
+          return city
+        })
+        .catch((error) => {
+          console.log(error)
+        })
       })
-      .then(city => {
-        return city
+      .then(data => {
+        return data[0]["dataValues"]
       })
       .catch((error) => {
         console.log(error)
       })
-    })
-    .then(data => {
-      return data[0]["dataValues"]
-    })
-    .catch((error) => {
-      console.log(error)
-    })
 
-  const steadies = getCityData(req.query.location)
-    .then(cityData => {
-      return getSteadyData(cityData,steadyUrl)
-    })
-    .then(response => {
-      return response
-    })
-    .catch((error) => {
-      console.log(error)
-    });
+      const steadies = getCityData(req.query.location)
+      .then(cityData => {
+        return getSteadyData(cityData,steadyUrl)
+      })
+      .then(response => {
+        return response
+      })
+      .catch((error) => {
+        console.log(error)
+      });
 
-  const currents = getCityData(req.query.location)
-    .then(cityData => {
-      return getCurrentData(cityData,currentUrl1,currentUrl2)
-    })
-    .then(response => {
-      return response
-    })
-    .catch((error) => {
-      console.log(error)
-    });
+      const currents = getCityData(req.query.location)
+      .then(cityData => {
+        return getCurrentData(cityData,currentUrl1,currentUrl2)
+      })
+      .then(response => {
+        return response
+      })
+      .catch((error) => {
+        console.log(error)
+      });
 
-  const cityDays = getCityData(req.query.location)
-    .then(cityData => {
-      return getCityDayData(cityData,forecastUrl1,forecastUrl2)
-    })
-    .then(response => {
-      return response
-    })
-    .catch((error) => {
-      console.log(error)
-    });
+      const cityDays = getCityData(req.query.location)
+      .then(cityData => {
+        return getCityDayData(cityData,forecastUrl1,forecastUrl2)
+      })
+      .then(response => {
+        return response
+      })
+      .catch((error) => {
+        console.log(error)
+      });
 
 
-
-  Promise.all([findOrCreateCityData,currents,steadies,cityDays])
-    .then(data => {
+      Promise.all([findOrCreateCityData,currents,steadies,cityDays])
+      .then(data => {
+        res.setHeader("Content-Type", "application/json");
+        res.status(201).send({
+          city: data[0],
+          current: data[1],
+          steadies: data[2],
+          forecast: data[3]
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+    }
+    else {
       res.setHeader("Content-Type", "application/json");
-      res.status(201).send({
-            city: data[0],
-            current: data[1],
-            steadies: data[2],
-            forecast: data[3]
-          })
-        });
+      res.status(404).json({
+        error: `Unauthorized.`
+      });
+    }
+  })
 });
 
 
