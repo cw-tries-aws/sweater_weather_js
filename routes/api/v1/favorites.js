@@ -7,38 +7,77 @@ require('dotenv').config()
 var User = require('../../../models').User;
 var City = require('../../../models').City;
 var UserCity = require('../../../models').UserCity;
+var CityCurrent = require('../../../models').CityCurrent;
 
 
-const latUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=`
-const latKey = `&key=${process.env.GOOGLE_SECRET_KEY}`
+const steadyUrl = `https://weather.cit.api.here.com/weather/1.0/report.json?app_id=DemoAppId01082013GAL&app_code=AJKnXv84fjrb0KIHawS0Tg&product=forecast_astronomy&name=`
+const currentUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/`
+const currentUrl2 = `?exclude=daily,minutely,hourly,alerts,flags`
+const forecastUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/`
+const forecastUrl2 = `?exclude=currently,minutesly,hourly,alerts,flags&time=${new Date()}`
 
-const getCityData = (input) => {
-  return fetch(latUrl + input + latKey)
+
+// the create part is in the post request actually
+const createCurrentData = (cityData,cityId,url1,url2) => {
+  const latLong = cityData.latitude + ',' + cityData.longitude
+  return fetch(url1 + latLong + url2)
   .then(response => {
     if (response.ok) {
       return response.json();}
     throw new Error('Request Failed.');},
     networkError => console.log(networkError.message))
   .then(json => {
-    return formatCityData(json)
+    let data = json["currently"];
+    let returnData = {
+      temp: data["temperature"],
+       apparent: data["apparentTemperature"],
+       icon: data["icon"],
+       cloudCover: data["cloudCover"],
+       humidity: data["humidity"],
+       visibility: data["visibility"],
+       uvIndex: data["uvIndex"],
+       windSpeed: data["windSpeed"],
+       windDirection: data["windBearing"],
+       summary: data["summary"],
+       CityId: cityId
+    };
+    return returnData
   })
   .catch((error) => {
     console.log(error)
   })
 };
 
-function formatCityData(json) {
-  let address = json["results"][0]["formatted_address"];
-  let geodata = json["results"][0]["geometry"]["location"];
-  let cityData = {
-    name: address.split(", ")[0],
-    state: address.split(", ")[1],
-    country: address.split(", ")[2],
-    latitude: geodata["lat"],
-    longitude: geodata["lng"]
-  }
-  return cityData
-};
+
+// const createSteadyData = (cityData,cityId,url) => {
+//   const fullCity = cityData.name + ',' + cityData.state
+//   return fetch(url + fullCity)
+//   .then(response => {
+//     if (response.ok) {
+//       return response.json();}
+//       throw new Error('Request Failed.');},
+//       networkError => console.log(networkError.message))
+//       .then(json => {
+//         let data = json["astronomy"]["astronomy"][0];
+//         let returnData = {
+//           sunrise: data["sunrise"],
+//           sunset: data["sunset"],
+//           moonPhase: data["moonPhase"],
+//           phaseDescription: data["moonPhaseDesc"],
+//           phaseIcon: data["iconName"],
+//           cityId: cityId
+//           dayId: // how do I get this...
+//         }
+//         return returnData
+//       })
+//       .then(data => {
+//         CitySteady.create(data)
+//       })
+//       .catch((error) => {
+//         console.log(error)
+//       })
+//     };
+
 
 
 router.get("/", function(req,res,next) {
@@ -49,33 +88,16 @@ router.get("/", function(req,res,next) {
     }
   }).then(user => {
     if (user) {
-      UserCity.findAll({
+      const userCities = UserCity.findAll({
         where: {
           UserId: user["dataValues"]["id"]
-        }
-        // include: [{model: City}]
+        },
+        include: [{model: CityCurrent}]
       })
       .then(data => {
-        // eval(pry.it)
         res.setHeader("Content-Type", "application/json");
         res.status(200).send(JSON.stringify(data))
       }
-        // for (i = 0; i < data.length; i ++) {
-        //   City.findOne({
-        //     where: {
-        //       id: data[i]["dataValues"]["CityId"]
-        //     }
-        //   }).then(city => {
-        //     var returnData = {
-        //       first: "1"
-        //     }
-        //     const cityString = city["name"] + ', ' + city["state"]
-        //     returnData[cityString] = data[i-1]["dataValues"]
-        //   })
-        //   .catch((error) => {
-        //     console.log(error)
-        //   });
-        // eval(pry.it)
       )
       .catch((error) => {
         console.log(error)
@@ -102,7 +124,7 @@ router.post('/', function(req,res,next) {
     }
   }).then(user => {
     if (user) {
-      const findOrCreateCityData = getCityData(req.body.location)
+      const findOrCreateCityData = City.getCityData(req.body.location)
       .then(result => {
         return City.findOrCreate({
           where: {
@@ -121,7 +143,6 @@ router.post('/', function(req,res,next) {
             }
           }).then(result => {
             if (result[0]) {
-              // eval(pry.it)
               res.setHeader("Content-Type", "application/json");
               res.status(200).send({
                 "message": `${req.body.location} is already in your favorites`
@@ -129,22 +150,52 @@ router.post('/', function(req,res,next) {
             }
             else {
               const cityName = city[0]["dataValues"]["name"] + ', ' + city[0]["dataValues"]["state"]
-              UserCity.create({
-                cityName: cityName,
-                CityId: city[0]["dataValues"]["id"],
-                UserId: user["dataValues"]["id"]
-                // cityCurrent?
-              })
-              .then(data => {
-                res.setHeader("Content-Type", "application/json");
-                res.status(200).send({
-                  "message": `${req.body.location} has been added to your favorites`
+
+              // const citySteady = createSteadyData(city[0]["dataValues"],city[0]["dataValues"]["id"],steadyUrl1,steadyUrl2)
+              //   .then(results => {
+              //     return CitySteady.create(results)
+              //   }) // this is a promise
+              // const cityDays = createCityDayData(city[0]["dataValues"],city[0]["dataValues"]["id"],forecastUrl1,forecastUrl2)
+              //   .then(results => {
+              //     const returnData = {
+              //       for (i = 0; i < results.count; i ++) {
+              //         CityDay.create(results[i])
+              //           .catch((error) => {
+              //             console.log(error)
+              //           });
+              //       }
+              //     }
+              //     return returnData
+              //   }) // this is a promise
+              //
+              // Promise.all(citySteady,cityDays)
+              //   .then(what's below)
+
+              const cityCurrent = createCurrentData(city[0]["dataValues"],city[0]["dataValues"]["id"],currentUrl1,currentUrl2)
+                .then(results => {
+                  return CityCurrent.create(results)
+                }).then(cityCurrent => {
+                  UserCity.create({
+                    cityName: cityName,
+                    CityId: city[0]["dataValues"]["id"],
+                    UserId: user["dataValues"]["id"],
+                    CityCurrentId: cityCurrent["dataValues"]["id"]
+                  })
+                  .then(data => {
+                    res.setHeader("Content-Type", "application/json");
+                    res.status(200).send({
+                      "message": `${req.body.location} has been added to your favorites`
+                  })
                 })
+                .catch((error) => {
+                  console.log(error)
+                });
               })
               .catch((error) => {
                 console.log(error)
               });
             }
+
           }).catch((error) => {
             console.log(error)
           });
@@ -177,7 +228,7 @@ router.delete('/', function(req,res,next) {
     }
   }).then(user => {
     if (user) {
-      const findOrCreateCityData = getCityData(req.body.location)
+      const findOrCreateCityData = City.getCityData(req.body.location)
       .then(result => {
         return City.findOrCreate({
           where: {

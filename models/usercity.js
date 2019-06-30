@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   UserCity.associate = function(models) {
     // this works only without the city and user associations here
+    UserCity.belongsTo(models.CityCurrent)
   };
   return UserCity;
 };
