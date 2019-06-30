@@ -4,18 +4,23 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.addColumn(
       'UserCities',
-      'cityName',
+      'CityId',
       {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Cities",
+          key: "id"
+        },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
       }
     )
-
   },
 
   down: (queryInterface, Sequelize) => {
     return queryInterface.removeColumn(
      "UserCities",
-     "cityName"
+     "CityId"
    );
   }
 };
