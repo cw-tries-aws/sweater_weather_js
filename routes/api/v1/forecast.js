@@ -143,7 +143,6 @@ router.get("/", function(req,res,next) {
     }
   }).then(user => {
     if (user) {
-      eval(pry.it)
       const findOrCreateCityData = getCityData(req.query.location)
       .then(result => {
         return City.findOrCreate({

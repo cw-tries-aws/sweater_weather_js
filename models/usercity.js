@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     cityName: DataTypes.STRING,
     UserId: DataTypes.INTEGER,
     CityId: DataTypes.INTEGER,
-    cityCurrentId: DataTypes.INTEGER
+    CityCurrentId: DataTypes.INTEGER
   }, {});
   UserCity.associate = function(models) {
     // this works only without the city and user associations here
