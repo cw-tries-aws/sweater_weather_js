@@ -12,8 +12,11 @@ var CityCurrent = require('../../../models').CityCurrent;
 
 const latUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=`
 const latKey = `&key=${process.env.GOOGLE_SECRET_KEY}`
+const steadyUrl = `https://weather.cit.api.here.com/weather/1.0/report.json?app_id=DemoAppId01082013GAL&app_code=AJKnXv84fjrb0KIHawS0Tg&product=forecast_astronomy&name=`
 const currentUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/`
 const currentUrl2 = `?exclude=daily,minutely,hourly,alerts,flags`
+const forecastUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/`
+const forecastUrl2 = `?exclude=currently,minutesly,hourly,alerts,flags&time=${new Date()}`
 
 const getCityData = (input) => {
   return fetch(latUrl + input + latKey)
@@ -43,7 +46,7 @@ function formatCityData(json) {
   return cityData
 };
 
-
+// the create part is in the post request actually
 const createCurrentData = (cityData,cityId,url1,url2) => {
   const latLong = cityData.latitude + ',' + cityData.longitude
   return fetch(url1 + latLong + url2)
@@ -73,6 +76,36 @@ const createCurrentData = (cityData,cityId,url1,url2) => {
     console.log(error)
   })
 };
+
+
+// const createSteadyData = (cityData,cityId,url) => {
+//   const fullCity = cityData.name + ',' + cityData.state
+//   return fetch(url + fullCity)
+//   .then(response => {
+//     if (response.ok) {
+//       return response.json();}
+//       throw new Error('Request Failed.');},
+//       networkError => console.log(networkError.message))
+//       .then(json => {
+//         let data = json["astronomy"]["astronomy"][0];
+//         let returnData = {
+//           sunrise: data["sunrise"],
+//           sunset: data["sunset"],
+//           moonPhase: data["moonPhase"],
+//           phaseDescription: data["moonPhaseDesc"],
+//           phaseIcon: data["iconName"],
+//           cityId: cityId
+//           dayId: // how do I get this...
+//         }
+//         return returnData
+//       })
+//       .then(data => {
+//         CitySteady.create(data)
+//       })
+//       .catch((error) => {
+//         console.log(error)
+//       })
+//     };
 
 
 
@@ -191,7 +224,7 @@ router.post('/', function(req,res,next) {
                 console.log(error)
               });
             }
-            
+
           }).catch((error) => {
             console.log(error)
           });
