@@ -49,17 +49,34 @@ router.get("/", function(req,res,next) {
     }
   }).then(user => {
     if (user) {
-      return UserCity.findAll({
+      UserCity.findAll({
         where: {
           userId: user["dataValues"]["id"]
         }
+        // include: [{model: City}]
       })
       .then(data => {
+        // eval(pry.it)
         res.setHeader("Content-Type", "application/json");
-        res.status(200).send({
-          favorites: data
-        })
-      })
+        res.status(200).send(JSON.stringify(data))
+      }
+        // for (i = 0; i < data.length; i ++) {
+        //   City.findOne({
+        //     where: {
+        //       id: data[i]["dataValues"]["cityId"]
+        //     }
+        //   }).then(city => {
+        //     var returnData = {
+        //       first: "1"
+        //     }
+        //     const cityString = city["name"] + ', ' + city["state"]
+        //     returnData[cityString] = data[i-1]["dataValues"]
+        //   })
+        //   .catch((error) => {
+        //     console.log(error)
+        //   });
+        // eval(pry.it)
+      )
       .catch((error) => {
         console.log(error)
       });
