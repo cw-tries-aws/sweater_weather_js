@@ -7,6 +7,7 @@ require('dotenv').config()
 var User = require('../../../models').User;
 var City = require('../../../models').City;
 var UserCity = require('../../../models').UserCity;
+var CityCurrent = require('../../../models').CityCurrent;
 
 
 const latUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=`
@@ -49,37 +50,24 @@ router.get("/", function(req,res,next) {
     }
   }).then(user => {
     if (user) {
-      UserCity.findAll({
+      const userCities = UserCity.findAll({
         where: {
           UserId: user["dataValues"]["id"]
-        }
-        // include: [{model: City}]
+        },
+        include: [{model: CityCurrent}]
       })
       .then(data => {
-        // eval(pry.it)
+        eval(pry.it)
         res.setHeader("Content-Type", "application/json");
         res.status(200).send(JSON.stringify(data))
       }
-        // for (i = 0; i < data.length; i ++) {
-        //   City.findOne({
-        //     where: {
-        //       id: data[i]["dataValues"]["CityId"]
-        //     }
-        //   }).then(city => {
-        //     var returnData = {
-        //       first: "1"
-        //     }
-        //     const cityString = city["name"] + ', ' + city["state"]
-        //     returnData[cityString] = data[i-1]["dataValues"]
-        //   })
-        //   .catch((error) => {
-        //     console.log(error)
-        //   });
-        // eval(pry.it)
       )
       .catch((error) => {
         console.log(error)
       });
+
+      // Promise.all()
+
     }
     else {
       res.setHeader("Content-Type", "application/json");
