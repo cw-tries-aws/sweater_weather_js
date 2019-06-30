@@ -11,42 +11,41 @@ var CityCurrent = require('../../../models').CityCurrent;
 
 
 const steadyUrl = `https://weather.cit.api.here.com/weather/1.0/report.json?app_id=DemoAppId01082013GAL&app_code=AJKnXv84fjrb0KIHawS0Tg&product=forecast_astronomy&name=`
-const currentUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/`
-const currentUrl2 = `?exclude=daily,minutely,hourly,alerts,flags`
+
 const forecastUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/`
 const forecastUrl2 = `?exclude=currently,minutesly,hourly,alerts,flags&time=${new Date()}`
 
 
-// the create part is in the post request actually
-const createCurrentData = (cityData,cityId,url1,url2) => {
-  const latLong = cityData.latitude + ',' + cityData.longitude
-  return fetch(url1 + latLong + url2)
-  .then(response => {
-    if (response.ok) {
-      return response.json();}
-    throw new Error('Request Failed.');},
-    networkError => console.log(networkError.message))
-  .then(json => {
-    let data = json["currently"];
-    let returnData = {
-      temp: data["temperature"],
-       apparent: data["apparentTemperature"],
-       icon: data["icon"],
-       cloudCover: data["cloudCover"],
-       humidity: data["humidity"],
-       visibility: data["visibility"],
-       uvIndex: data["uvIndex"],
-       windSpeed: data["windSpeed"],
-       windDirection: data["windBearing"],
-       summary: data["summary"],
-       CityId: cityId
-    };
-    return returnData
-  })
-  .catch((error) => {
-    console.log(error)
-  })
-};
+
+// const createCurrentData = (cityData,cityId,url1,url2) => {
+//   const latLong = cityData.latitude + ',' + cityData.longitude
+//   return fetch(url1 + latLong + url2)
+//   .then(response => {
+//     if (response.ok) {
+//       return response.json();}
+//     throw new Error('Request Failed.');},
+//     networkError => console.log(networkError.message))
+//   .then(json => {
+//     let data = json["currently"];
+//     let returnData = {
+//       temp: data["temperature"],
+//        apparent: data["apparentTemperature"],
+//        icon: data["icon"],
+//        cloudCover: data["cloudCover"],
+//        humidity: data["humidity"],
+//        visibility: data["visibility"],
+//        uvIndex: data["uvIndex"],
+//        windSpeed: data["windSpeed"],
+//        windDirection: data["windBearing"],
+//        summary: data["summary"],
+//        CityId: cityId
+//     };
+//     return returnData
+//   })
+//   .catch((error) => {
+//     console.log(error)
+//   })
+// };
 
 
 // const createSteadyData = (cityData,cityId,url) => {
@@ -149,7 +148,6 @@ router.post('/', function(req,res,next) {
               })
             }
             else {
-              const cityName = city[0]["dataValues"]["name"] + ', ' + city[0]["dataValues"]["state"]
 
               // const citySteady = createSteadyData(city[0]["dataValues"],city[0]["dataValues"]["id"],steadyUrl1,steadyUrl2)
               //   .then(results => {
@@ -171,10 +169,9 @@ router.post('/', function(req,res,next) {
               // Promise.all(citySteady,cityDays)
               //   .then(what's below)
 
-              const cityCurrent = createCurrentData(city[0]["dataValues"],city[0]["dataValues"]["id"],currentUrl1,currentUrl2)
-                .then(results => {
-                  return CityCurrent.create(results)
-                }).then(cityCurrent => {
+              const cityName = city[0]["dataValues"]["name"] + ', ' + city[0]["dataValues"]["state"]
+              CityCurrent.createCurrentData(city[0]["dataValues"],city[0]["dataValues"]["id"])
+                .then(cityCurrent => {
                   UserCity.create({
                     cityName: cityName,
                     CityId: city[0]["dataValues"]["id"],
