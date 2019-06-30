@@ -79,7 +79,6 @@ router.get("/", function(req,res,next) {
 
 router.post('/', function(req,res,next) {
   let inputKey = req.body.api_key
-  // get the city from the request - find or create it
   User.findOne({
     where: {
       api_key: inputKey
@@ -126,6 +125,79 @@ router.post('/', function(req,res,next) {
               .catch((error) => {
                 console.log(error)
               });
+            }
+          }).catch((error) => {
+            console.log(error)
+          });
+        })
+        .catch((error) => {
+          console.log(error)
+        });
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+    }
+    else {
+      res.setHeader("Content-Type", "application/json");
+      res.status(404).json({
+        error: `Unauthorized.`
+      });
+    }
+  })
+  .catch((error) => {
+    console.log(error)
+  });
+})
+
+router.delete('/', function(req,res,next) {
+  let inputKey = req.body.api_key
+  User.findOne({
+    where: {
+      api_key: inputKey
+    }
+  }).then(user => {
+    if (user) {
+      const findOrCreateCityData = getCityData(req.body.location)
+      .then(result => {
+        return City.findOrCreate({
+          where: {
+            name: result["name"],
+            state: result["state"],
+            country: result["country"],
+            latitude: result["latitude"].toString(),
+            longitude: result["longitude"].toString()
+          }
+        })
+        .then(city => {
+          UserCity.findAll({
+            where: {
+              cityId: city[0]["dataValues"]["id"],
+              userId: user["dataValues"]["id"]
+            }
+          }).then(result => {
+            if (result[0]) {
+              UserCity.destroy({
+                where: {
+                  cityId: city[0]["dataValues"]["id"],
+                  userId: user["dataValues"]["id"]
+                }
+              })
+              .then(result => {
+                res.setHeader("Content-Type", "application/json");
+                res.status(200).send({
+                  "message": `${req.body.location} has been removed from your favorites`
+                })
+              })
+              .catch((error) => {
+                console.log(error)
+              });
+            }
+            else {
+              res.setHeader("Content-Type", "application/json");
+              res.status(200).send({
+                "message": `${req.body.location} is not in your favorites`
+              })
             }
           }).catch((error) => {
             console.log(error)
