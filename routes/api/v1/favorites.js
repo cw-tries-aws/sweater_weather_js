@@ -10,41 +10,12 @@ var UserCity = require('../../../models').UserCity;
 var CityCurrent = require('../../../models').CityCurrent;
 
 
-const latUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=`
-const latKey = `&key=${process.env.GOOGLE_SECRET_KEY}`
 const steadyUrl = `https://weather.cit.api.here.com/weather/1.0/report.json?app_id=DemoAppId01082013GAL&app_code=AJKnXv84fjrb0KIHawS0Tg&product=forecast_astronomy&name=`
 const currentUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/`
 const currentUrl2 = `?exclude=daily,minutely,hourly,alerts,flags`
 const forecastUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/`
 const forecastUrl2 = `?exclude=currently,minutesly,hourly,alerts,flags&time=${new Date()}`
 
-const getCityData = (input) => {
-  return fetch(latUrl + input + latKey)
-  .then(response => {
-    if (response.ok) {
-      return response.json();}
-    throw new Error('Request Failed.');},
-    networkError => console.log(networkError.message))
-  .then(json => {
-    return formatCityData(json)
-  })
-  .catch((error) => {
-    console.log(error)
-  })
-};
-
-function formatCityData(json) {
-  let address = json["results"][0]["formatted_address"];
-  let geodata = json["results"][0]["geometry"]["location"];
-  let cityData = {
-    name: address.split(", ")[0],
-    state: address.split(", ")[1],
-    country: address.split(", ")[2],
-    latitude: geodata["lat"],
-    longitude: geodata["lng"]
-  }
-  return cityData
-};
 
 // the create part is in the post request actually
 const createCurrentData = (cityData,cityId,url1,url2) => {
@@ -153,7 +124,7 @@ router.post('/', function(req,res,next) {
     }
   }).then(user => {
     if (user) {
-      const findOrCreateCityData = getCityData(req.body.location)
+      const findOrCreateCityData = City.getCityData(req.body.location)
       .then(result => {
         return City.findOrCreate({
           where: {
@@ -257,7 +228,7 @@ router.delete('/', function(req,res,next) {
     }
   }).then(user => {
     if (user) {
-      const findOrCreateCityData = getCityData(req.body.location)
+      const findOrCreateCityData = City.getCityData(req.body.location)
       .then(result => {
         return City.findOrCreate({
           where: {

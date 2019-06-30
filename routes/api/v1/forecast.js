@@ -18,37 +18,6 @@ const currentUrl2 = `?exclude=daily,minutely,hourly,alerts,flags`
 const forecastUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/`
 const forecastUrl2 = `?exclude=currently,minutesly,hourly,alerts,flags&time=${new Date()}`
 
-const latUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=`
-const latKey = `&key=${process.env.GOOGLE_SECRET_KEY}`
-
-const getCityData = (input) => {
-  return fetch(latUrl + input + latKey)
-  .then(response => {
-    if (response.ok) {
-      return response.json();}
-    throw new Error('Request Failed.');},
-    networkError => console.log(networkError.message))
-  .then(json => {
-    return formatCityData(json)
-  })
-  .catch((error) => {
-    console.log(error)
-  })
-};
-
-function formatCityData(json) {
-  let address = json["results"][0]["formatted_address"];
-  let geodata = json["results"][0]["geometry"]["location"];
-  let cityData = {
-    name: address.split(", ")[0],
-    state: address.split(", ")[1],
-    country: address.split(", ")[2],
-    latitude: geodata["lat"],
-    longitude: geodata["lng"]
-  }
-  return cityData
-};
-
 
 const getSteadyData = (cityData,url) => {
   const fullCity = cityData.name + ',' + cityData.state
@@ -143,7 +112,7 @@ router.get("/", function(req,res,next) {
     }
   }).then(user => {
     if (user) {
-      const findOrCreateCityData = getCityData(req.query.location)
+      const findOrCreateCityData = City.getCityData(req.query.location)
       .then(result => {
         return City.findOrCreate({
           where: {
@@ -168,7 +137,7 @@ router.get("/", function(req,res,next) {
         console.log(error)
       })
 
-      const steadies = getCityData(req.query.location)
+      const steadies = City.getCityData(req.query.location)
       .then(cityData => {
         return getSteadyData(cityData,steadyUrl)
       })
@@ -179,7 +148,7 @@ router.get("/", function(req,res,next) {
         console.log(error)
       });
 
-      const currents = getCityData(req.query.location)
+      const currents = City.getCityData(req.query.location)
       .then(cityData => {
         return getCurrentData(cityData,currentUrl1,currentUrl2)
       })
@@ -190,7 +159,7 @@ router.get("/", function(req,res,next) {
         console.log(error)
       });
 
-      const cityDays = getCityData(req.query.location)
+      const cityDays = City.getCityData(req.query.location)
       .then(cityData => {
         return getCityDayData(cityData,forecastUrl1,forecastUrl2)
       })
