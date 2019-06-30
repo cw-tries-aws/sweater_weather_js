@@ -97,24 +97,43 @@ router.post('/', function(req,res,next) {
             longitude: result["longitude"].toString()
           }
         })
-
         .then(city => {
-          UserCity.create({
-            cityId: city.id,
-            userId: user["dataValues"]["id"]
-            // cityCurrent?
-          })
-          .then(data => {
-            res.setHeader("Content-Type", "application/json");
-            res.status(200).send({
-              "message": `${req.body.location} has been added to your favorites`
-            })
-          })
-          .catch((error) => {
+          UserCity.findAll({
+            where: {
+              cityId: city[0]["dataValues"]["id"],
+              userId: user["dataValues"]["id"]
+            }
+          }).then(result => {
+            if (result[0]) {
+              // eval(pry.it)
+              res.setHeader("Content-Type", "application/json");
+              res.status(200).send({
+                "message": `${req.body.location} is already in your favorites`
+              })
+            }
+            else {
+              UserCity.create({
+                cityId: city[0]["dataValues"]["id"],
+                userId: user["dataValues"]["id"]
+                // cityCurrent?
+              })
+              .then(data => {
+                res.setHeader("Content-Type", "application/json");
+                res.status(200).send({
+                  "message": `${req.body.location} has been added to your favorites`
+                })
+              })
+              .catch((error) => {
+                console.log(error)
+              });
+            }
+          }).catch((error) => {
             console.log(error)
           });
         })
-
+        .catch((error) => {
+          console.log(error)
+        });
       })
       .catch((error) => {
         console.log(error)
