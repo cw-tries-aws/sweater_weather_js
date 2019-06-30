@@ -51,7 +51,7 @@ router.get("/", function(req,res,next) {
     if (user) {
       UserCity.findAll({
         where: {
-          userId: user["dataValues"]["id"]
+          UserId: user["dataValues"]["id"]
         }
         // include: [{model: City}]
       })
