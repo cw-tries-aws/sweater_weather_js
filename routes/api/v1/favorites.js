@@ -147,37 +147,51 @@ router.post('/', function(req,res,next) {
             else {
               const cityName = city[0]["dataValues"]["name"] + ', ' + city[0]["dataValues"]["state"]
 
+              // const citySteady = createSteadyData(city[0]["dataValues"],city[0]["dataValues"]["id"],steadyUrl1,steadyUrl2)
+              //   .then(results => {
+              //     return CitySteady.create(results)
+              //   }) // this is a promise
+              // const cityDays = createCityDayData(city[0]["dataValues"],city[0]["dataValues"]["id"],forecastUrl1,forecastUrl2)
+              //   .then(results => {
+              //     const returnData = {
+              //       for (i = 0; i < results.count; i ++) {
+              //         CityDay.create(results[i])
+              //           .catch((error) => {
+              //             console.log(error)
+              //           });
+              //       }
+              //     }
+              //     return returnData
+              //   }) // this is a promise
+              //
+              // Promise.all(citySteady,cityDays)
+              //   .then(what's below)
+
               const cityCurrent = createCurrentData(city[0]["dataValues"],city[0]["dataValues"]["id"],currentUrl1,currentUrl2)
-              .then(results => {
-                return CityCurrent.create(results)
-              }).then(cityCurrent => {
-                eval(pry.it)
-                UserCity.create({
-                  cityName: cityName,
-                  CityId: city[0]["dataValues"]["id"],
-                  UserId: user["dataValues"]["id"],
-                  CityCurrentId: cityCurrent["dataValues"]["id"]
-                })
-                .then(data => {
-                  //create cityCurrent
-                  //create cityDay
-                  //create citySteady
-
-
-                  res.setHeader("Content-Type", "application/json");
-                  res.status(200).send({
-                    "message": `${req.body.location} has been added to your favorites`
+                .then(results => {
+                  return CityCurrent.create(results)
+                }).then(cityCurrent => {
+                  UserCity.create({
+                    cityName: cityName,
+                    CityId: city[0]["dataValues"]["id"],
+                    UserId: user["dataValues"]["id"],
+                    CityCurrentId: cityCurrent["dataValues"]["id"]
+                  })
+                  .then(data => {
+                    res.setHeader("Content-Type", "application/json");
+                    res.status(200).send({
+                      "message": `${req.body.location} has been added to your favorites`
                   })
                 })
                 .catch((error) => {
                   console.log(error)
                 });
-
               })
               .catch((error) => {
                 console.log(error)
               });
             }
+            
           }).catch((error) => {
             console.log(error)
           });
