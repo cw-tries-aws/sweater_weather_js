@@ -128,7 +128,7 @@ router.post('/', function(req,res,next) {
               })
             }
             else {
-              const cityName = city["name"] + ', ' + city["state"]
+              const cityName = city[0]["dataValues"]["name"] + ', ' + city[0]["dataValues"]["state"]
               UserCity.create({
                 cityName: cityName,
                 cityId: city[0]["dataValues"]["id"],
