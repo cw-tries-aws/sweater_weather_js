@@ -63,7 +63,7 @@ router.get("/", function(req,res,next) {
         // for (i = 0; i < data.length; i ++) {
         //   City.findOne({
         //     where: {
-        //       id: data[i]["dataValues"]["cityId"]
+        //       id: data[i]["dataValues"]["CityId"]
         //     }
         //   }).then(city => {
         //     var returnData = {
@@ -116,8 +116,8 @@ router.post('/', function(req,res,next) {
         .then(city => {
           UserCity.findAll({
             where: {
-              cityId: city[0]["dataValues"]["id"],
-              userId: user["dataValues"]["id"]
+              CityId: city[0]["dataValues"]["id"],
+              UserId: user["dataValues"]["id"]
             }
           }).then(result => {
             if (result[0]) {
@@ -131,8 +131,8 @@ router.post('/', function(req,res,next) {
               const cityName = city[0]["dataValues"]["name"] + ', ' + city[0]["dataValues"]["state"]
               UserCity.create({
                 cityName: cityName,
-                cityId: city[0]["dataValues"]["id"],
-                userId: user["dataValues"]["id"]
+                CityId: city[0]["dataValues"]["id"],
+                UserId: user["dataValues"]["id"]
                 // cityCurrent?
               })
               .then(data => {
@@ -191,15 +191,15 @@ router.delete('/', function(req,res,next) {
         .then(city => {
           UserCity.findAll({
             where: {
-              cityId: city[0]["dataValues"]["id"],
-              userId: user["dataValues"]["id"]
+              CityId: city[0]["dataValues"]["id"],
+              UserId: user["dataValues"]["id"]
             }
           }).then(result => {
             if (result[0]) {
               UserCity.destroy({
                 where: {
-                  cityId: city[0]["dataValues"]["id"],
-                  userId: user["dataValues"]["id"]
+                  CityId: city[0]["dataValues"]["id"],
+                  UserId: user["dataValues"]["id"]
                 }
               })
               .then(result => {
