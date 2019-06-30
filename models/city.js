@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   City.associate = function(models) {
     City.hasMany(models.UserCity, {
-      foreignKey: "CityId" // for some reason it needs this lowercase
+      foreignKey: "CityId"
     })
   };
   return City;

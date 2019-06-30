@@ -12,6 +12,8 @@ var CityCurrent = require('../../../models').CityCurrent;
 
 const latUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=`
 const latKey = `&key=${process.env.GOOGLE_SECRET_KEY}`
+const currentUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/`
+const currentUrl2 = `?exclude=daily,minutely,hourly,alerts,flags`
 
 const getCityData = (input) => {
   return fetch(latUrl + input + latKey)
@@ -42,6 +44,38 @@ function formatCityData(json) {
 };
 
 
+const createCurrentData = (cityData,cityId,url1,url2) => {
+  const latLong = cityData.latitude + ',' + cityData.longitude
+  return fetch(url1 + latLong + url2)
+  .then(response => {
+    if (response.ok) {
+      return response.json();}
+    throw new Error('Request Failed.');},
+    networkError => console.log(networkError.message))
+  .then(json => {
+    let data = json["currently"];
+    let returnData = {
+      temp: data["temperature"],
+       apparent: data["apparentTemperature"],
+       icon: data["icon"],
+       cloudCover: data["cloudCover"],
+       humidity: data["humidity"],
+       visibility: data["visibility"],
+       uvIndex: data["uvIndex"],
+       windSpeed: data["windSpeed"],
+       windDirection: data["windBearing"],
+       summary: data["summary"],
+       CityId: cityId
+    };
+    return returnData
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+};
+
+
+
 router.get("/", function(req,res,next) {
   let inputKey = req.body.api_key
   User.findOne({
@@ -57,7 +91,6 @@ router.get("/", function(req,res,next) {
         include: [{model: CityCurrent}]
       })
       .then(data => {
-        eval(pry.it)
         res.setHeader("Content-Type", "application/json");
         res.status(200).send(JSON.stringify(data))
       }
@@ -65,9 +98,6 @@ router.get("/", function(req,res,next) {
       .catch((error) => {
         console.log(error)
       });
-
-      // Promise.all()
-
     }
     else {
       res.setHeader("Content-Type", "application/json");
@@ -109,7 +139,6 @@ router.post('/', function(req,res,next) {
             }
           }).then(result => {
             if (result[0]) {
-              // eval(pry.it)
               res.setHeader("Content-Type", "application/json");
               res.status(200).send({
                 "message": `${req.body.location} is already in your favorites`
@@ -117,17 +146,33 @@ router.post('/', function(req,res,next) {
             }
             else {
               const cityName = city[0]["dataValues"]["name"] + ', ' + city[0]["dataValues"]["state"]
-              UserCity.create({
-                cityName: cityName,
-                CityId: city[0]["dataValues"]["id"],
-                UserId: user["dataValues"]["id"]
-                // cityCurrent?
-              })
-              .then(data => {
-                res.setHeader("Content-Type", "application/json");
-                res.status(200).send({
-                  "message": `${req.body.location} has been added to your favorites`
+
+              const cityCurrent = createCurrentData(city[0]["dataValues"],city[0]["dataValues"]["id"],currentUrl1,currentUrl2)
+              .then(results => {
+                return CityCurrent.create(results)
+              }).then(cityCurrent => {
+                eval(pry.it)
+                UserCity.create({
+                  cityName: cityName,
+                  CityId: city[0]["dataValues"]["id"],
+                  UserId: user["dataValues"]["id"],
+                  CityCurrentId: cityCurrent["dataValues"]["id"]
                 })
+                .then(data => {
+                  //create cityCurrent
+                  //create cityDay
+                  //create citySteady
+
+
+                  res.setHeader("Content-Type", "application/json");
+                  res.status(200).send({
+                    "message": `${req.body.location} has been added to your favorites`
+                  })
+                })
+                .catch((error) => {
+                  console.log(error)
+                });
+
               })
               .catch((error) => {
                 console.log(error)
