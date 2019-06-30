@@ -63,9 +63,9 @@ const getSteadyData = (cityData,url) => {
         let returnData = {
           sunrise: data["sunrise"],
           sunset: data["sunset"],
-          moon_phase: data["moonPhase"],
-          phase_description: data["moonPhaseDesc"],
-          phase_icon: data["iconName"]
+          moonPhase: data["moonPhase"],
+          phaseDescription: data["moonPhaseDesc"],
+          phaseIcon: data["iconName"]
         }
         return returnData
       })
@@ -86,16 +86,16 @@ const getCurrentData = (cityData,url1,url2) => {
   .then(json => {
     let data = json["currently"];
     let returnData = {
-      "temp": data["temperature"],
-       "apparent": data["apparentTemperature"],
-       "icon": data["icon"],
-       "cloud_cover": data["cloudCover"],
-       "humidity": data["humidity"],
-       "visibility": data["visibility"],
-       "uv_index": data["uvIndex"],
-       "wind_speed": data["windSpeed"],
-       "wind_direction": data["windBearing"],
-       "summary": data["summary"]
+      temp: data["temperature"],
+       apparent: data["apparentTemperature"],
+       icon: data["icon"],
+       cloudCover: data["cloudCover"],
+       humidity: data["humidity"],
+       visibility: data["visibility"],
+       uvIndex: data["uvIndex"],
+       windSpeed: data["windSpeed"],
+       windDirection: data["windBearing"],
+       summary: data["summary"]
     };
     return returnData
   })
@@ -120,11 +120,11 @@ const getCityDayData = (cityData,url1,url2) => {
       returnData[`${i + 1}`] = {
         // "city_id": data[i][""],
         // "day_id": data[i][""],
-        "high": data[i]["temperatureHigh"],
-        "low": data[i]["temperatureLow"],
-        "icon": data[i]["icon"],
-        "precip_probability": data[i]["precipProbability"],
-        "summary": data[i]["summary"]
+        high: data[i]["temperatureHigh"],
+        low: data[i]["temperatureLow"],
+        icon: data[i]["icon"],
+        precipProbability: data[i]["precipProbability"],
+        summary: data[i]["summary"]
       }
     }
     return returnData
