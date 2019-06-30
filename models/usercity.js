@@ -2,8 +2,8 @@
 module.exports = (sequelize, DataTypes) => {
   const UserCity = sequelize.define('UserCity', {
     cityName: DataTypes.STRING,
-    userId: DataTypes.INTEGER,
-    cityId: DataTypes.INTEGER,
+    UserId: DataTypes.INTEGER,
+    CityId: DataTypes.INTEGER,
     cityCurrentId: DataTypes.INTEGER
   }, {});
   UserCity.associate = function(models) {
