@@ -91,10 +91,24 @@ router.get("/", function(req,res,next) {
             }
           })
             .then(city => {
-              if (city[0]) {
-                // check if associations return as well
-                res.setHeader("Content-Type", "application/json");
-                res.status(200).send(JSON.stringify(city[0]))
+              if (city) {
+                // check if associations return as well -they don't
+                const current = CityCurrent.createCurrentData(result,city["dataValues"]["id"])
+                // const steadies = CitySteady.createSteadiesData();
+                // const cityDays = CityDays.createCityDaysData();
+                Promise.all([current]).then(returnData => {
+                  res.setHeader("Content-Type", "application/json");
+                  res.status(200).send({
+                    city: city["dataValues"],
+                    current: returnData[0]["dataValues"]
+                    // steadies: data[2],
+                    // forecast: data[3]
+                  })
+
+                })
+                .catch((error) => {
+                  console.log(error)
+                });
               }
               else {
                 //create everything
@@ -106,8 +120,8 @@ router.get("/", function(req,res,next) {
                     // return {data: data, current: current}
                     // eval(pry.it)
                     res.setHeader("Content-Type", "application/json");
-                    res.status(200).send({newCity
-                      // city: currentResults["data"]["dataValues"],
+                    res.status(200).send({
+                      city: newCity
                       // current: currentResults["current"],
                       // steadies: 'not ready yet',
                       // forecast: 'not ready yet'
