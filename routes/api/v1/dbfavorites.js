@@ -50,38 +50,6 @@ const forecastUrl2 = `?exclude=currently,minutesly,hourly,alerts,flags&time=${ne
 //   })
 // };
 
-
-// const createSteadyData = (cityData,cityId,url) => {
-//   const fullCity = cityData.name + ',' + cityData.state
-//   return fetch(url + fullCity)
-//   .then(response => {
-//     if (response.ok) {
-//       return response.json();}
-//       throw new Error('Request Failed.');},
-//       networkError => console.log(networkError.message))
-//       .then(json => {
-//         let data = json["astronomy"]["astronomy"][0];
-//         let returnData = {
-//           sunrise: data["sunrise"],
-//           sunset: data["sunset"],
-//           moonPhase: data["moonPhase"],
-//           phaseDescription: data["moonPhaseDesc"],
-//           phaseIcon: data["iconName"],
-//           cityId: cityId
-//           dayId: // how do I get this...
-//         }
-//         return returnData
-//       })
-//       .then(data => {
-//         CitySteady.create(data)
-//       })
-//       .catch((error) => {
-//         console.log(error)
-//       })
-//     };
-
-
-
 router.get("/", function(req,res,next) {
   if (req.body.api_key) {
     let inputKey = req.body.api_key
@@ -98,13 +66,20 @@ router.get("/", function(req,res,next) {
           include: [{model: CityCurrent}]
         })
         .then(data => {
+          return CitySteady.findAll({
+            where: {
+              CityId: data[0]["dataValues"]["id"]
+            }
+          })
+        })
+        .then(allData => {
+          eval(pry.it)
           res.setHeader("Content-Type", "application/json");
           res.status(200).send(JSON.stringify(data))
-        }
-      )
-      .catch((error) => {
-        console.log(error)
-      });
+        })
+        .catch((error) => {
+          console.log(error)
+        });
     }
     else {
       res.setHeader("Content-Type", "application/json");
