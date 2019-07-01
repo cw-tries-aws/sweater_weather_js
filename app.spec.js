@@ -33,13 +33,32 @@ describe("Forecast call", () => {
 })
 
 describe("Favorites call", () => {
+  beforeAll(() => {
+    shell.exec('npx sequelize db:create')
+  });
+  beforeEach(() => {
+    shell.exec('npx sequelize db:migrate')
+    shell.exec('npx sequelize db:seed:all')
+  })
+  afterEach(() => {
+    shell.exec('npx sequelize db:migrate:undo:all')
+  })
+
   test("get request should return a 401 without an api key", () => {
     return request(app).get('/api/v1/favorites')
       .then(response => {
         expect(response.statusCode).toBe(401)
       })
   })
-  
+
+  test("post request should return favorites with api_key", () => {
+    return request(app).post('/api/v1/favorites')
+      .send({api_key: "12345"})
+      .then(response => {
+        expect(response.statusCode).toBe(401)
+      })
+  })
+
   test("post request should return a 401 without an api key", () => {
     return request(app).post('/api/v1/favorites')
       .then(response => {
