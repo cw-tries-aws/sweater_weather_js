@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       throw new Error('Request Failed.');},
       networkError => console.log(networkError.message))
       .then(json => {
+        eval(pry.it)
         Day.findOne({
           where: {
             date: json["astronomy"]["astronomy"][1]["utcTime"].substring(0,10)
@@ -52,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
         })
       })
       .then(data => {
-        CitySteady.create(data)
+        return CitySteady.create(data)
       })
       .catch((error) => {
         console.log(error)

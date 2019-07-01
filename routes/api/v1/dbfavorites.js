@@ -136,6 +136,9 @@ router.post('/', function(req,res,next) {
               }
               else {
                 CitySteady.createSteadyData(city[0]["dataValues"],city[0]["dataValues"]["id"])
+                  .then(stuff => {
+                    // eval(pry.it)
+                  })
                   .catch((error) => {
                     console.log(error)
                   });
