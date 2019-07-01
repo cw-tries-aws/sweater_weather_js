@@ -1,9 +1,4 @@
 'use strict';
-var City = require('../models').City;
-var pry = require('pryjs');
-
-
-
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -235,7 +230,7 @@ module.exports = {
    updatedAt: new Date()
  },
  {
-   name: 'New York',
+   name: 'New York City',
    state: 'NY',
    country: 'USA',
    latitude: 40.7127753,
