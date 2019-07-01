@@ -92,7 +92,6 @@ router.get("/", function(req,res,next) {
           })
             .then(city => {
               if (city) {
-                // check if associations return as well -they don't
                 const current = CityCurrent.createCurrentData(result,city["dataValues"]["id"])
                 // const steadies = CitySteady.createSteadiesData();
                 // const cityDays = CityDays.createCityDaysData();
@@ -101,35 +100,33 @@ router.get("/", function(req,res,next) {
                   res.status(200).send({
                     city: city["dataValues"],
                     current: returnData[0]["dataValues"]
-                    // steadies: data[2],
-                    // forecast: data[3]
+                    // steadies: returnData[1]["dataValues"],
+                    // forecast: returnData[2]["dataValues"]
                   })
-
                 })
                 .catch((error) => {
                   console.log(error)
                 });
               }
               else {
-                //create everything
                 return City.create(result)
                   .then(newCity => {
                     const current = CityCurrent.createCurrentData(result,newCity["dataValues"]["id"]);
                     // const steadies = CitySteady.createSteadiesData();
                     // const cityDays = CityDays.createCityDaysData();
-                    // return {data: data, current: current}
-                    // eval(pry.it)
-                    res.setHeader("Content-Type", "application/json");
-                    res.status(200).send({
-                      city: newCity
-                      // current: currentResults["current"],
-                      // steadies: 'not ready yet',
-                      // forecast: 'not ready yet'
+                    Promise.all([current]).then(returnData => {
+                      res.setHeader("Content-Type", "application/json");
+                      res.status(200).send({
+                        city: newCity["dataValues"],
+                        current: returnData[0]["dataValues"]
+                        // steadies: 'not ready yet',
+                        // forecast: 'not ready yet'
+                      })
                     })
-                    // return current
+                    .catch((error) => {
+                      console.log(error)
+                    });
                   })
-                  // .then(currentResults => {
-                  // })
                   .catch((error) => {
                     console.log(error)
                   });
