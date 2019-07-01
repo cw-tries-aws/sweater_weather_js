@@ -8,6 +8,9 @@ var User = require('../../../models').User;
 var City = require('../../../models').City;
 var UserCity = require('../../../models').UserCity;
 var CityCurrent = require('../../../models').CityCurrent;
+var CitySteady = require('../../../models').CitySteady;
+var Day = require('../../../models').Day;
+
 
 
 const steadyUrl = `https://weather.cit.api.here.com/weather/1.0/report.json?app_id=DemoAppId01082013GAL&app_code=AJKnXv84fjrb0KIHawS0Tg&product=forecast_astronomy&name=`
@@ -157,54 +160,25 @@ router.post('/', function(req,res,next) {
                 })
               }
               else {
+                CitySteady.createSteadyData(city[0]["dataValues"],city[0]["dataValues"]["id"])
+                  .catch((error) => {
+                    console.log(error)
+                  });
 
-                // const citySteady = createSteadyData(city[0]["dataValues"],city[0]["dataValues"]["id"],steadyUrl1,steadyUrl2)
-                //   .then(results => {
-                  //     return CitySteady.create(results)
-                  //   }) // this is a promise
-                  // const cityDays = createCityDayData(city[0]["dataValues"],city[0]["dataValues"]["id"],forecastUrl1,forecastUrl2)
-                  //   .then(results => {
-                    //     const returnData = {
-                      //       for (i = 0; i < results.count; i ++) {
-                        //         CityDay.create(results[i])
-                        //           .catch((error) => {
-                          //             console.log(error)
-                          //           });
-                          //       }
-                          //     }
-                          //     return returnData
-                          //   }) // this is a promise
-                          //
-                          // Promise.all(citySteady,cityDays)
-                          //   .then(what's below)
-
-                          const cityName = city[0]["dataValues"]["name"] + ', ' + city[0]["dataValues"]["state"]
-                          CityCurrent.createCurrentData(city[0]["dataValues"],city[0]["dataValues"]["id"])
-                          .then(cityCurrent => {
-                            UserCity.create({
-                              cityName: cityName,
-                              CityId: city[0]["dataValues"]["id"],
-                              UserId: user["dataValues"]["id"],
-                              CityCurrentId: cityCurrent["dataValues"]["id"]
-                            })
-                            .then(data => {
-                              res.setHeader("Content-Type", "application/json");
-                              res.status(200).send({
-                                "message": `${req.body.location} has been added to your favorites`
-                              })
-                            })
-                            .catch((error) => {
-                              console.log(error)
-                            });
-                          })
-                          .catch((error) => {
-                            console.log(error)
-                          });
-                        }
-
-                      }).catch((error) => {
-                        console.log(error)
-                      });
+                const cityName = city[0]["dataValues"]["name"] + ', ' + city[0]["dataValues"]["state"]
+                CityCurrent.createCurrentData(city[0]["dataValues"],city[0]["dataValues"]["id"])
+                  .then(cityCurrent => {
+                    UserCity.create({
+                      cityName: cityName,
+                      CityId: city[0]["dataValues"]["id"],
+                      UserId: user["dataValues"]["id"],
+                      CityCurrentId: cityCurrent["dataValues"]["id"]
+                    })
+                    .then(data => {
+                      res.setHeader("Content-Type", "application/json");
+                      res.status(200).send({
+                        "message": `${req.body.location} has been added to your favorites`
+                      })
                     })
                     .catch((error) => {
                       console.log(error)
@@ -214,16 +188,29 @@ router.post('/', function(req,res,next) {
                     console.log(error)
                   });
                 }
-                else {
-                  res.setHeader("Content-Type", "application/json");
-                  res.status(401).json({
-                    error: `Unauthorized.`
-                  });
-                }
-              })
-              .catch((error) => {
+
+              }).catch((error) => {
                 console.log(error)
               });
+            })
+            .catch((error) => {
+              console.log(error)
+            });
+          })
+          .catch((error) => {
+            console.log(error)
+          });
+        }
+        else {
+          res.setHeader("Content-Type", "application/json");
+          res.status(401).json({
+            error: `Unauthorized.`
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      });
   }
   else {
     res.setHeader("Content-Type", "application/json");
