@@ -75,14 +75,15 @@ const getCityDayData = (cityData,url1,url2) => {
 //else => create city, create current, create steadies, create citydays => return city includes current,steadies,citydays
 
 router.get("/", function(req,res,next) {
-  let inputKey = req.body.api_key
-  User.findOne({
-    where: {
-      api_key: inputKey
-    }
-  }).then(user => {
-    if (user) {
-      City.getCityData(req.query.location)
+  if (req.body.api_key) {
+    let inputKey = req.body.api_key
+    User.findOne({
+      where: {
+        api_key: inputKey
+      }
+    }).then(user => {
+      if (user) {
+        City.getCityData(req.query.location)
         .then(result => {
           return City.findOne({
             where: {
@@ -90,67 +91,74 @@ router.get("/", function(req,res,next) {
               state: result["state"],
             }
           })
-            .then(city => {
-              if (city) {
-                const current = CityCurrent.createCurrentData(result,city["dataValues"]["id"])
+          .then(city => {
+            if (city) {
+              const current = CityCurrent.createCurrentData(result,city["dataValues"]["id"])
+              // const steadies = CitySteady.createSteadiesData();
+              // const cityDays = CityDays.createCityDaysData();
+              Promise.all([current]).then(returnData => {
+                res.setHeader("Content-Type", "application/json");
+                res.status(200).send({
+                  city: city["dataValues"],
+                  current: returnData[0]["dataValues"]
+                  // steadies: returnData[1]["dataValues"],
+                  // forecast: returnData[2]["dataValues"]
+                })
+              })
+              .catch((error) => {
+                console.log(error)
+              });
+            }
+            else {
+              return City.create(result)
+              .then(newCity => {
+                const current = CityCurrent.createCurrentData(result,newCity["dataValues"]["id"]);
                 // const steadies = CitySteady.createSteadiesData();
                 // const cityDays = CityDays.createCityDaysData();
                 Promise.all([current]).then(returnData => {
                   res.setHeader("Content-Type", "application/json");
                   res.status(200).send({
-                    city: city["dataValues"],
+                    city: newCity["dataValues"],
                     current: returnData[0]["dataValues"]
-                    // steadies: returnData[1]["dataValues"],
-                    // forecast: returnData[2]["dataValues"]
+                    // steadies: 'not ready yet',
+                    // forecast: 'not ready yet'
                   })
                 })
                 .catch((error) => {
                   console.log(error)
                 });
-              }
-              else {
-                return City.create(result)
-                  .then(newCity => {
-                    const current = CityCurrent.createCurrentData(result,newCity["dataValues"]["id"]);
-                    // const steadies = CitySteady.createSteadiesData();
-                    // const cityDays = CityDays.createCityDaysData();
-                    Promise.all([current]).then(returnData => {
-                      res.setHeader("Content-Type", "application/json");
-                      res.status(200).send({
-                        city: newCity["dataValues"],
-                        current: returnData[0]["dataValues"]
-                        // steadies: 'not ready yet',
-                        // forecast: 'not ready yet'
-                      })
-                    })
-                    .catch((error) => {
-                      console.log(error)
-                    });
-                  })
-                  .catch((error) => {
-                    console.log(error)
-                  });
+              })
+              .catch((error) => {
+                console.log(error)
+              });
 
-              }
-            })
-            .catch((error) => {
-              console.log(error)
-            });
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+          });
         })
         .catch((error) => {
           console.log(error)
         });
-    }
-    else {
-      res.setHeader("Content-Type", "application/json");
-      res.status(401).json({
-        error: `Unauthorized.`
-      });
-    }
-  })
-  .catch((error) => {
-    console.log(error)
-  });
+      }
+      else {
+        res.setHeader("Content-Type", "application/json");
+        res.status(401).json({
+          error: `Unauthorized.`
+        });
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+  }
+  else {
+    res.setHeader("Content-Type", "application/json");
+    res.status(401).json({
+      error: `Unauthorized.`
+    });
+  }
 })
 
 module.exports = router;
