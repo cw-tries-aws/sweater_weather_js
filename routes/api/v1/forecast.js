@@ -187,7 +187,7 @@ router.get("/", function(req,res,next) {
     }
     else {
       res.setHeader("Content-Type", "application/json");
-      res.status(404).json({
+      res.status(401).json({
         error: `Unauthorized.`
       });
     }

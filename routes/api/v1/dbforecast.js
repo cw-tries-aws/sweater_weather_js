@@ -141,6 +141,12 @@ router.get("/", function(req,res,next) {
           console.log(error)
         });
     }
+    else {
+      res.setHeader("Content-Type", "application/json");
+      res.status(401).json({
+        error: `Unauthorized.`
+      });
+    }
   })
   .catch((error) => {
     console.log(error)

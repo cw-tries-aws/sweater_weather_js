@@ -16,69 +16,6 @@ const forecastUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SE
 const forecastUrl2 = `?exclude=currently,minutesly,hourly,alerts,flags&time=${new Date()}`
 
 
-
-// const createCurrentData = (cityData,cityId,url1,url2) => {
-//   const latLong = cityData.latitude + ',' + cityData.longitude
-//   return fetch(url1 + latLong + url2)
-//   .then(response => {
-//     if (response.ok) {
-//       return response.json();}
-//     throw new Error('Request Failed.');},
-//     networkError => console.log(networkError.message))
-//   .then(json => {
-//     let data = json["currently"];
-//     let returnData = {
-//       temp: data["temperature"],
-//        apparent: data["apparentTemperature"],
-//        icon: data["icon"],
-//        cloudCover: data["cloudCover"],
-//        humidity: data["humidity"],
-//        visibility: data["visibility"],
-//        uvIndex: data["uvIndex"],
-//        windSpeed: data["windSpeed"],
-//        windDirection: data["windBearing"],
-//        summary: data["summary"],
-//        CityId: cityId
-//     };
-//     return returnData
-//   })
-//   .catch((error) => {
-//     console.log(error)
-//   })
-// };
-
-
-// const createSteadyData = (cityData,cityId,url) => {
-//   const fullCity = cityData.name + ',' + cityData.state
-//   return fetch(url + fullCity)
-//   .then(response => {
-//     if (response.ok) {
-//       return response.json();}
-//       throw new Error('Request Failed.');},
-//       networkError => console.log(networkError.message))
-//       .then(json => {
-//         let data = json["astronomy"]["astronomy"][0];
-//         let returnData = {
-//           sunrise: data["sunrise"],
-//           sunset: data["sunset"],
-//           moonPhase: data["moonPhase"],
-//           phaseDescription: data["moonPhaseDesc"],
-//           phaseIcon: data["iconName"],
-//           cityId: cityId
-//           dayId: // how do I get this...
-//         }
-//         return returnData
-//       })
-//       .then(data => {
-//         CitySteady.create(data)
-//       })
-//       .catch((error) => {
-//         console.log(error)
-//       })
-//     };
-
-
-
 router.get("/", function(req,res,next) {
   let inputKey = req.body.api_key
   User.findOne({
@@ -104,7 +41,7 @@ router.get("/", function(req,res,next) {
     }
     else {
       res.setHeader("Content-Type", "application/json");
-      res.status(404).json({
+      res.status(401).json({
         error: `Unauthorized.`
       });
     }
@@ -207,7 +144,7 @@ router.post('/', function(req,res,next) {
     }
     else {
       res.setHeader("Content-Type", "application/json");
-      res.status(404).json({
+      res.status(401).json({
         error: `Unauthorized.`
       });
     }
@@ -280,7 +217,7 @@ router.delete('/', function(req,res,next) {
     }
     else {
       res.setHeader("Content-Type", "application/json");
-      res.status(404).json({
+      res.status(401).json({
         error: `Unauthorized.`
       });
     }
