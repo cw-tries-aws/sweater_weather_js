@@ -33,72 +33,100 @@ let dayAbbr = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 let days = [{
   name: dayNames[today.getDay()],
   abbreviation: dayAbbr[today.getDay()],
-  date: today
+  date: today,
+  createdAt: new Date(),
+  updatedAt: new Date()
 },
 {
   name: dayNames[tomorrow.getDay()],
   abbreviation: dayAbbr[tomorrow.getDay()],
-  date: tomorrow
+  date: tomorrow,
+  createdAt: new Date(),
+  updatedAt: new Date()
 },
 {
   name: dayNames[tomorrow2.getDay()],
   abbreviation: dayAbbr[tomorrow2.getDay()],
-  date: tomorrow2
+  date: tomorrow2,
+  createdAt: new Date(),
+  updatedAt: new Date()
 },
 {
   name: dayNames[tomorrow3.getDay()],
   abbreviation: dayAbbr[tomorrow3.getDay()],
-  date: tomorrow3
+  date: tomorrow3,
+  createdAt: new Date(),
+  updatedAt: new Date()
 },
 {
   name: dayNames[tomorrow4.getDay()],
   abbreviation: dayAbbr[tomorrow4.getDay()],
-  date: tomorrow4
+  date: tomorrow4,
+  createdAt: new Date(),
+  updatedAt: new Date()
 },
 {
   name: dayNames[tomorrow5.getDay()],
   abbreviation: dayAbbr[tomorrow5.getDay()],
-  date: tomorrow5
+  date: tomorrow5,
+  createdAt: new Date(),
+  updatedAt: new Date()
 },
 {
   name: dayNames[tomorrow6.getDay()],
   abbreviation: dayAbbr[tomorrow6.getDay()],
-  date: tomorrow6
+  date: tomorrow6,
+  createdAt: new Date(),
+  updatedAt: new Date()
 },
 {
   name: dayNames[tomorrow7.getDay()],
   abbreviation: dayAbbr[tomorrow7.getDay()],
-  date: tomorrow7
+  date: tomorrow7,
+  createdAt: new Date(),
+  updatedAt: new Date()
 },
 {
   name: dayNames[tomorrow8.getDay()],
   abbreviation: dayAbbr[tomorrow8.getDay()],
-  date: tomorrow8
+  date: tomorrow8,
+  createdAt: new Date(),
+  updatedAt: new Date()
 },
 {
   name: dayNames[tomorrow9.getDay()],
   abbreviation: dayAbbr[tomorrow9.getDay()],
-  date: tomorrow9
+  date: tomorrow9,
+  createdAt: new Date(),
+  updatedAt: new Date()
 },
 {
   name: dayNames[tomorrow10.getDay()],
   abbreviation: dayAbbr[tomorrow10.getDay()],
-  date: tomorrow10
+  date: tomorrow10,
+  createdAt: new Date(),
+  updatedAt: new Date()
 },
 {
   name: dayNames[tomorrow11.getDay()],
   abbreviation: dayAbbr[tomorrow11.getDay()],
-  date: tomorrow11
+  date: tomorrow11,
+  createdAt: new Date(),
+  updatedAt: new Date()
 },
 {
   name: dayNames[tomorrow12.getDay()],
   abbreviation: dayAbbr[tomorrow12.getDay()],
-  date: tomorrow12
+  date: tomorrow12,
+  createdAt: new Date(),
+  updatedAt: new Date()
 },
 {
   name: dayNames[tomorrow13.getDay()],
   abbreviation: dayAbbr[tomorrow13.getDay()],
-  date: tomorrow13
+  date: tomorrow13,
+  createdAt: new Date(),
+  updatedAt: new Date()
 }];
 
 module.exports = {

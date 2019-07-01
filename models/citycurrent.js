@@ -26,32 +26,37 @@ module.exports = (sequelize, DataTypes) => {
 
   CityCurrent.createCurrentData = (cityData,cityId) => {
     const latLong = cityData.latitude + ',' + cityData.longitude
-    return fetch(currentUrl1 + latLong + currentUrl2)
-    .then(response => {
-      if (response.ok) {
-        return response.json();}
-      throw new Error('Request Failed.');},
-      networkError => console.log(networkError.message))
-    .then(json => {
-      let data = json["currently"];
-      let returnData = {
-        temp: data["temperature"],
-         apparent: data["apparentTemperature"],
-         icon: data["icon"],
-         cloudCover: data["cloudCover"],
-         humidity: data["humidity"],
-         visibility: data["visibility"],
-         uvIndex: data["uvIndex"],
-         windSpeed: data["windSpeed"],
-         windDirection: data["windBearing"],
-         summary: data["summary"],
-         CityId: cityId
-      };
-      return CityCurrent.create(returnData)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+    if (cityData.latitude) {
+      return fetch(currentUrl1 + latLong + currentUrl2)
+      .then(response => {
+        if (response.ok) {
+          return response.json();}
+          throw new Error('Request Failed.');},
+          networkError => console.log(networkError.message))
+          .then(json => {
+            let data = json["currently"];
+            let returnData = {
+              temp: data["temperature"],
+              apparent: data["apparentTemperature"],
+              icon: data["icon"],
+              cloudCover: data["cloudCover"],
+              humidity: data["humidity"],
+              visibility: data["visibility"],
+              uvIndex: data["uvIndex"],
+              windSpeed: data["windSpeed"],
+              windDirection: data["windBearing"],
+              summary: data["summary"],
+              CityId: cityId
+            };
+            return CityCurrent.create(returnData)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+    }
+    else {
+      return null
+    }
   };
 
 

@@ -6,9 +6,6 @@ require('dotenv').config()
 
 var User = require('../../../models').User;
 var City = require('../../../models').City;
-// var CitySteady = require('../../../models').CitySteady;
-// var CityCurrent = require('../../../models').CityCurrent;
-// var CityDays = require('../../../models').CityDays;
 
 const steadyUrl = `https://weather.cit.api.here.com/weather/1.0/report.json?app_id=DemoAppId01082013GAL&app_code=AJKnXv84fjrb0KIHawS0Tg&product=forecast_astronomy&name=`
 
@@ -17,6 +14,9 @@ const currentUrl2 = `?exclude=daily,minutely,hourly,alerts,flags`
 
 const forecastUrl1 = `https://api.darksky.net/forecast/${process.env.DARK_SKY_SECRET_KEY}/`
 const forecastUrl2 = `?exclude=currently,minutesly,hourly,alerts,flags&time=${new Date()}`
+
+const latUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=`
+const latKey = `&key=${process.env.GOOGLE_SECRET_KEY}`
 
 
 const getSteadyData = (cityData,url) => {
@@ -43,35 +43,34 @@ const getSteadyData = (cityData,url) => {
       })
     };
 
-
-const getCurrentData = (cityData,url1,url2) => {
-  const latLong = cityData.latitude + ',' + cityData.longitude
-  return fetch(url1 + latLong + url2)
-  .then(response => {
-    if (response.ok) {
-      return response.json();}
-    throw new Error('Request Failed.');},
-    networkError => console.log(networkError.message))
-  .then(json => {
-    let data = json["currently"];
-    let returnData = {
-      temp: data["temperature"],
-       apparent: data["apparentTemperature"],
-       icon: data["icon"],
-       cloudCover: data["cloudCover"],
-       humidity: data["humidity"],
-       visibility: data["visibility"],
-       uvIndex: data["uvIndex"],
-       windSpeed: data["windSpeed"],
-       windDirection: data["windBearing"],
-       summary: data["summary"]
+    const getCurrentData = (cityData,url1,url2) => {
+      const latLong = cityData.latitude + ',' + cityData.longitude
+      return fetch(url1 + latLong + url2)
+      .then(response => {
+        if (response.ok) {
+          return response.json();}
+        throw new Error('Request Failed.');},
+        networkError => console.log(networkError.message))
+      .then(json => {
+        let data = json["currently"];
+        let returnData = {
+          "temp": data["temperature"],
+           "apparent": data["apparentTemperature"],
+           "icon": data["icon"],
+           "cloud_cover": data["cloudCover"],
+           "humidity": data["humidity"],
+           "visibility": data["visibility"],
+           "uv_index": data["uvIndex"],
+           "wind_speed": data["windSpeed"],
+           "wind_direction": data["windBearing"],
+           "summary": data["summary"]
+        };
+        return returnData
+      })
+      .catch((error) => {
+        console.log(error)
+      })
     };
-    return returnData
-  })
-  .catch((error) => {
-    console.log(error)
-  })
-};
 
 
 const getCityDayData = (cityData,url1,url2) => {
@@ -102,6 +101,7 @@ const getCityDayData = (cityData,url1,url2) => {
     console.log(error)
   })
 };
+
 
 
 router.get("/", function(req,res,next) {
@@ -174,7 +174,7 @@ router.get("/", function(req,res,next) {
       Promise.all([findOrCreateCityData,currents,steadies,cityDays])
       .then(data => {
         res.setHeader("Content-Type", "application/json");
-        res.status(201).send({
+        res.status(200).send({
           city: data[0],
           current: data[1],
           steadies: data[2],
@@ -187,7 +187,7 @@ router.get("/", function(req,res,next) {
     }
     else {
       res.setHeader("Content-Type", "application/json");
-      res.status(404).json({
+      res.status(401).json({
         error: `Unauthorized.`
       });
     }
