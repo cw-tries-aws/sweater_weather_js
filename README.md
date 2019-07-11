@@ -26,6 +26,95 @@ body:
 ```
 response:
 ```javascript
+{
+  "city": {
+  "id": 64,
+  "name": "Newport",
+  "state": "OR",
+  "country": "USA",
+  "latitude": "44.6367836",
+  "longitude": "-124.0534505",
+  "updatedAt": "2019-07-11T17:31:51.480Z",
+  "createdAt": "2019-07-11T17:31:51.480Z"
+},
+"current": {
+  "temp": 63.68,
+  "apparent": 63.98,
+  "icon": "partly-cloudy-day",
+  "cloud_cover": 0.87,
+  "humidity": 0.9,
+  "visibility": 8.708,
+  "uv_index": 4,
+  "wind_speed": 3.89,
+  "wind_direction": 248,
+  "summary": "Mostly Cloudy"
+},
+"steadies": {
+  "sunrise": "5:41AM",
+  "sunset": "9:01PM",
+  "moonPhase": 0.669,
+  "phaseDescription": "Waxing gibbous",
+  "phaseIcon": "cw_waxing_gibbous"
+},
+"forecast": {
+  "1": {
+    "high": 65.18,
+    "low": 57.02,
+    "icon": "fog",
+    "precipProbability": 0.13,
+    "summary": "Foggy in the morning."
+  },
+  "2": {
+    "high": 64.99,
+    "low": 56.72,
+    "icon": "partly-cloudy-day",
+    "precipProbability": 0.05,
+    "summary": "Mostly cloudy throughout the day."
+  },
+  "3": {
+    "high": 64.36,
+    "low": 55.06,
+    "icon": "partly-cloudy-day",
+    "precipProbability": 0.07,
+    "summary": "Mostly cloudy throughout the day."
+  },
+  "4": {
+    "high": 63.34,
+    "low": 57.13,
+    "icon": "partly-cloudy-day",
+    "precipProbability": 0.05,
+    "summary": "Mostly cloudy throughout the day."
+  },
+  "5": {
+    "high": 66.34,
+    "low": 55.26,
+    "icon": "cloudy",
+    "precipProbability": 0.06,
+    "summary": "Mostly cloudy throughout the day."
+  },
+  "6": {
+    "high": 66.05,
+    "low": 52.3,
+    "icon": "clear-day",
+    "precipProbability": 0.01,
+    "summary": "Partly cloudy throughout the day."
+  },
+  "7": {
+    "high": 65.81,
+    "low": 56.78,
+    "icon": "cloudy",
+    "precipProbability": 0.07,
+    "summary": "Overcast throughout the day."
+  },
+  "8": {
+    "high": 63,
+    "low": 55.21,
+    "icon": "partly-cloudy-day",
+    "precipProbability": 0.23,
+    "summary": "Mostly cloudy throughout the day."
+    }
+  }
+}
 ```
 ### POST `/api/v1/users?email=EXAMPLE@EXAMPLE.COM&password=PASSWORD&password_confirmation=PASSWORD`
 
@@ -84,7 +173,6 @@ body:
 response:
 ```javascript
 body:
-
 {
   "message": "Denver, CO has been added to your favorites",
 }
