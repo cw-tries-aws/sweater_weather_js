@@ -220,7 +220,7 @@ body:
   }
 ]
 ```
-### DELETE `/api/v1/favorites?api_key=USER_API_KEY&location=CITY_ID`
+### DELETE `/api/v1/favorites?api_key=USER_API_KEY&location=CITY_NAME`
 
 request:
 ```javascript

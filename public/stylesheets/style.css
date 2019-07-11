@@ -1,8 +1,109 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: url(https://blogs.egu.eu/geolog/files/2016/10/mesocyclone-1400x800.jpg);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  font-family: 'Playfair Display', serif;
+  color: #D8D8D8;
 }
 
 a {
-  color: #00B7FF;
+  color: #D8D8D8;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+hr {
+  width: 100%;
+}
+a:hover {
+  background:#D8D8D8;
+  color: rgba(35, 55, 66, 1);
+  font-size: 20px;
+}
+
+h2 {
+  font-family: 'Bungee Outline', cursive;
+  font-size: 2.3em;
+  margin: 0px;
+}
+
+h3 {
+  color: rgba(35, 55, 66, 1);
+  font-size: 30px;
+}
+
+h4 {
+  color: rgba(35, 55, 66, 1);
+  font-size: 20px;
+}
+
+code, p {
+  color: rgba(35, 55, 66, 1);
+}
+
+p {
+  margin: 0px;
+}
+
+pre {
+  background: #D8D8D8;
+  width: 30vw;
+}
+
+.no-margin {
+  margin: 0px;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+}
+
+.circle {
+  background: rgba(35, 55, 66, 0.8);
+  border-radius: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 36%;
+  height: 100%;
+  padding: 39px;
+  text-align: center;
+}
+
+
+.one-third {
+  width: 33%;
+}
+
+.two-thirds {
+  background: rgba(225, 220, 200, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+}
+
+.row-section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: left;
+}
+
+.column-section {
+  display: flex;
+  flex-direction: column;
+  margin: 25px;
+}
+
+.midline {
+  border-left: 2px solid grey;
+  font-size: 1px;
+}
+
+.tab {
+  margin-left: 20px;
 }
