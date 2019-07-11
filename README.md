@@ -12,13 +12,145 @@ There are two ways to get forecast and favorites:
 
 ## Endpoints
 
-- GET `/api/v1/forecast?location=CITYNAME`
-- POST `/api/v1/users?email=EXAMPLE@EXAMPLE.COM&password=PASSWORD&password_confirmation=PASSWORD`
-- POST `/api/v1/sessions?user[email]=EXAMPLE@EXAMPLE.COM&user[password]=PASSWORD`
-- POST `/api/v1/favorites?api_key=USER_API_KEY&location=CITY_ID`
-- GET `/api/v1/favorites?api_key=USER_API_KEY`
-- DELETE `/api/v1/favorites?api_key=USER_API_KEY&location=CITY_ID`
+### GET `/api/v1/forecast?location=CITYNAME`
 
+request:
+```javascript
+Content-Type: application/json
+Accept: application/json
+
+body:
+{
+  "api_key": "jgn983hy48thw9begh98h4539h4"
+}
+```
+response:
+```javascript
+```
+### POST `/api/v1/users?email=EXAMPLE@EXAMPLE.COM&password=PASSWORD&password_confirmation=PASSWORD`
+
+request:
+```javascript
+Content-Type: application/json
+Accept: application/json
+
+body:
+{
+  "email": "my_email@example.com",
+  "password": "password"
+  "password_confirmation": "password"
+}
+```
+response:
+```javascript
+body:
+{
+  "message": "email@example.com has been created",
+  "api_key": "jgn983hy48thw9begh98h4539h4"
+}
+```
+### POST `/api/v1/sessions?user[email]=EXAMPLE@EXAMPLE.COM&user[password]=PASSWORD`
+
+request:
+```javascript
+Content-Type: application/json
+Accept: application/json
+body:
+{
+  "email": "my_email@example.com",
+  "password": "password"
+}
+```
+response:
+```javascript
+body:
+{
+  "api_key": "jgn983hy48thw9begh98h4539h4",
+}
+```
+### POST `/api/v1/favorites?api_key=USER_API_KEY&location=CITY_NAME`
+
+request:
+```javascript
+Content-Type: application/json
+Accept: application/json
+
+body:
+{
+  "location": "Denver, CO",
+  "api_key": "jgn983hy48thw9begh98h4539h4"
+}
+```
+response:
+```javascript
+body:
+
+{
+  "message": "Denver, CO has been added to your favorites",
+}
+```
+### GET `/api/v1/favorites?api_key=USER_API_KEY`
+
+request:
+```javascript
+Content-Type: application/json
+Accept: application/json
+body:
+
+{
+  "api_key": "jgn983hy48thw9begh98h4539h4"
+}
+```
+response:
+```javascript
+body:
+[
+  {
+    "id": 14,
+    "cityName": "Salem, OR",
+    "UserId": 6,
+    "CityId": 2,
+    "CityCurrentId": 16,
+    "createdAt": "2019-07-11T17:26:06.404Z",
+    "updatedAt": "2019-07-11T17:26:06.404Z",
+    "CityCurrent": {
+      "id": 16,
+      "temp": 70.72,
+      "apparent": 70.72,
+      "icon": "partly-cloudy-day",
+      "cloudCover": 0.69,
+      "humidity": 0.65,
+      "visibility": 10,
+      "uvIndex": 4,
+      "windSpeed": 0.85,
+      "windDirection": 327,
+      "summary": "Mostly Cloudy",
+      "CityId": 2,
+      "createdAt": "2019-07-11T17:26:06.362Z",
+      "updatedAt": "2019-07-11T17:26:06.362Z"
+    }
+  }
+]
+```
+### DELETE `/api/v1/favorites?api_key=USER_API_KEY&location=CITY_ID`
+
+request:
+```javascript
+Content-Type: application/json
+Accept: application/json
+
+body:
+{
+  "location": "Denver, CO",
+  "api_key": "jgn983hy48thw9begh98h4539h4"
+}
+```
+response:
+```javascript
+{
+    "message": "phoenix has been removed from your favorites"
+}
+```
 ## Getting Started
 
 ### Requirements

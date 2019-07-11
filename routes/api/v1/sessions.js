@@ -15,13 +15,13 @@ router.post('', function(req,res,next) {
     }).then(result => {
       if (result) {
         let passwordHash = result["dataValues"]["password"]
-        let apiKey = result["dataValues"]["api_key"]
+        let api_key = result["dataValues"]["api_key"]
         let verify = bcrypt.compare(passwordAttempt, passwordHash)
         .then(comparison => {
           if (comparison) {
             res.setHeader("Content-Type", "application/json");
             res.status(200).json({
-              api_key: apiKey
+              api_key: api_key
             });
           }
           else {
