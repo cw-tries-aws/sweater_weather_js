@@ -59,7 +59,10 @@ router.post("/", function(req,res,next) {
             })
             .then(user => {
               res.setHeader("Content-Type", "application/json");
-              res.status(201).send(`${email} has been created ${JSON.stringify(user)}`);
+              res.status(201).json({
+                message: `${email} has been created`,
+                api_key: `${user.api_key}`
+              });
             })
             .catch(error => {
               res.setHeader("Content-Type", "application/json");
