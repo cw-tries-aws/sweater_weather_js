@@ -13,6 +13,28 @@ var dbFavoritesRouter = require('./routes/api/v1/dbfavorites')
 
 var app = express();
 
+var pg = require('pg')
+
+var connection = pg.createConnection({
+  host: process.env.RDS_HOSTNAME,
+  user: process.env.RDS_USERNAME,
+  password: process.env.RDS_PASSWORD,
+  port: process.env.RDS_PORT
+});
+
+connection.connect(function(err) {
+  if (err) {
+    console.error('Database connection failed: ' + err.stack);
+    return;
+  }
+  console.log('Connected to database.')
+});
+
+connection.end();
+
+
+
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
